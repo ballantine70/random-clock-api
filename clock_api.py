@@ -84,7 +84,11 @@ def generate_poem_id(time24, content):
 @app.route('/api/v1/clock/status', methods=['POST'])
 def status():
     """Status endpoint - does not require auth"""
-    body = request.get_json()
+    try:
+        body = request.get_json(force=True, silent=True) or {}
+    except:
+        body = {}
+    
     screen_id = body.get('screenId', 'unknown')
     build_id = body.get('buildId')
     
@@ -108,7 +112,10 @@ def compose():
     if REQUIRE_AUTH and not check_auth():
         return jsonify({'error': 'Unauthorized'}), 401
     
-    body = request.get_json()
+    try:
+        body = request.get_json(force=True, silent=True) or {}
+    except:
+        body = {}
     
     # Extract time from request
     if 'time24' in body:
@@ -335,4 +342,3 @@ if __name__ == '__main__':
     if REQUIRE_AUTH:
         print(f'API key: {API_KEY}')
     app.run(debug=False, host='0.0.0.0', port=port)
-
