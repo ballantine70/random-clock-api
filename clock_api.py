@@ -139,8 +139,8 @@ def compose():
     schedule = generate_daily_schedule()
     current_item = schedule[minute]
     
-    # Format as poem (single line for now, but could be multi-line)
-    poem = current_item['content']
+    # Format as poem with time prepended
+    poem = f"{time24} — {current_item['content']}"
     
     # Generate poem ID
     poem_id = generate_poem_id(time24, poem)
