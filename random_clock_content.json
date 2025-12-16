@@ -1,0 +1,2417 @@
+{
+  "metadata": {
+    "total_items": 481,
+    "items_per_card": 4,
+    "total_cards": 120,
+    "repetitions_per_day": 3,
+    "description": "Content for Random the Book poem/1 style clock - 1440 minutes with each item appearing 3 times",
+    "cards_completed": 120
+  },
+  "items": [
+    {
+      "id": 1,
+      "content": "How do you build a fair lottery machine in 1956?",
+      "card": "ERNIE"
+    },
+    {
+      "id": 2,
+      "content": "ERNIE used electronic noise from neon tubes, pulsing at 11,000 times per second to generate random numbers.",
+      "card": "ERNIE"
+    },
+    {
+      "id": 3,
+      "content": "The original ERNIE served until the 1970s; ERNIE 5 now uses quantum technology and light.",
+      "card": "ERNIE"
+    },
+    {
+      "id": 4,
+      "content": "True randomness required dual counters comparing results to ensure fairness even if one component failed.",
+      "card": "ERNIE"
+    },
+    {
+      "id": 5,
+      "content": "What if your survival depended on biological luck?",
+      "card": "T-cells"
+    },
+    {
+      "id": 6,
+      "content": "Your immune system generates millions of T-cells with randomly shuffled receptors, most useless, hoping one matches the next threat.",
+      "card": "T-cells"
+    },
+    {
+      "id": 7,
+      "content": "Netflix's thumbnail testing works like your immune system: try random variations, clone what sticks.",
+      "card": "T-cells"
+    },
+    {
+      "id": 8,
+      "content": "Wasteful systems can be effective when you can't predict what's coming.",
+      "card": "T-cells"
+    },
+    {
+      "id": 9,
+      "content": "If Fortune controls the dice, why build a tower?",
+      "card": "Dice Tower"
+    },
+    {
+      "id": 10,
+      "content": "The oldest known dice tower dates to 4th century CE Rome, despite belief that gods controlled random outcomes.",
+      "card": "Dice Tower"
+    },
+    {
+      "id": 11,
+      "content": "Modern 'dice jails' punish misbehaving dice, showing superstitions about randomness persist today.",
+      "card": "Dice Tower"
+    },
+    {
+      "id": 12,
+      "content": "Why does Fortune need a dice tower to ensure fairness?",
+      "card": "Dice Tower"
+    },
+    {
+      "id": 13,
+      "content": "Why do we scramble to justify our snap judgements?",
+      "card": "Gut vs System"
+    },
+    {
+      "id": 14,
+      "content": "We make instant gut decisions, then scramble to package them in charts and data for organisational acceptance.",
+      "card": "Gut vs System"
+    },
+    {
+      "id": 15,
+      "content": "Daniel Kahneman's Fast and Slow thinking might just be gut feeling plus post-rationalisation time.",
+      "card": "Gut vs System"
+    },
+    {
+      "id": 16,
+      "content": "Learning to bridge gut instinct and systematic evaluation becomes crucial in uncertain environments.",
+      "card": "Gut vs System"
+    },
+    {
+      "id": 17,
+      "content": "What would your closest friend do?",
+      "card": "Oblique Strategies"
+    },
+    {
+      "id": 18,
+      "content": "Brian Eno and Peter Schmidt's 1970s cards break creative blocks with cryptic instructions like 'Honour thy error as a hidden intention'.",
+      "card": "Oblique Strategies"
+    },
+    {
+      "id": 19,
+      "content": "Musicians from David Bowie to Coldplay have used them across creative disciplines.",
+      "card": "Oblique Strategies"
+    },
+    {
+      "id": 20,
+      "content": "Random provocations bypass habitual thinking patterns, opening possibilities you'd normally exclude.",
+      "card": "Oblique Strategies"
+    },
+    {
+      "id": 21,
+      "content": "Can meaning emerge from blind collaboration?",
+      "card": "Exquisite Corpse"
+    },
+    {
+      "id": 22,
+      "content": "Surrealists folded paper and wrote sentence parts without seeing others' contributions, creating unexpectedly beautiful poetry.",
+      "card": "Exquisite Corpse"
+    },
+    {
+      "id": 23,
+      "content": "The game explores whether meaning emerges from chance combinations or unconscious communication.",
+      "card": "Exquisite Corpse"
+    },
+    {
+      "id": 24,
+      "content": "With enough attempts and rich vocabulary, combinatorics ensures striking metaphors will inevitably emerge.",
+      "card": "Exquisite Corpse"
+    },
+    {
+      "id": 25,
+      "content": "What do your expense reports reveal about honesty?",
+      "card": "Benford's Law"
+    },
+    {
+      "id": 26,
+      "content": "In natural datasets, the number 1 appears as first digit 30% of the time, while 9 appears less than 5%.",
+      "card": "Benford's Law"
+    },
+    {
+      "id": 27,
+      "content": "Fraudsters unconsciously distribute digits evenly, creating a detectable statistical signature.",
+      "card": "Benford's Law"
+    },
+    {
+      "id": 28,
+      "content": "During the Greek financial crisis, Benford's Law revealed significant deviations suggesting data manipulation.",
+      "card": "Benford's Law"
+    },
+    {
+      "id": 29,
+      "content": "Why won't you bet everything you own on a coin flip?",
+      "card": "Bernoulli"
+    },
+    {
+      "id": 30,
+      "content": "Daniel Bernoulli recognised that value depends on who you are, what you have, and what you stand to lose.",
+      "card": "Bernoulli"
+    },
+    {
+      "id": 31,
+      "content": "A beggar might value steady income more than a risky lump sum, even if mathematically equivalent.",
+      "card": "Bernoulli"
+    },
+    {
+      "id": 32,
+      "content": "Randomness comes with context - it falls into the messy terrain of human circumstances and fears.",
+      "card": "Bernoulli"
+    },
+    {
+      "id": 33,
+      "content": "When did you last create a unique moment in history?",
+      "card": "Card Shuffling"
+    },
+    {
+      "id": 34,
+      "content": "A shuffled deck of 52 cards has more possible arrangements than atoms on Earth.",
+      "card": "Card Shuffling"
+    },
+    {
+      "id": 35,
+      "content": "The number is 52 factorial: 8 followed by 67 zeros.",
+      "card": "Card Shuffling"
+    },
+    {
+      "id": 36,
+      "content": "Shuffling creates something that has never existed before and likely never will again.",
+      "card": "Card Shuffling"
+    },
+    {
+      "id": 37,
+      "content": "Where does skill end and circumstance begin?",
+      "card": "Adam Peaty Olympics"
+    },
+    {
+      "id": 38,
+      "content": "Adam Peaty lost Olympic gold by 0.02 seconds, then tested positive for COVID the next day.",
+      "card": "Adam Peaty Olympics"
+    },
+    {
+      "id": 39,
+      "content": "Water temperature variations, starting block positioning, and hormone fluctuations all influence microscopic margins.",
+      "card": "Adam Peaty Olympics"
+    },
+    {
+      "id": 40,
+      "content": "In elite sport, random biological and environmental variations often exceed performance gaps between athletes.",
+      "card": "Adam Peaty Olympics"
+    },
+    {
+      "id": 41,
+      "content": "Where should you look to find love?",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 42,
+      "content": "Most people marry someone who lived within a few miles during their formative years.",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 43,
+      "content": "Geographic proximity during ages 16-26 predicts relationships more powerfully than personality compatibility.",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 44,
+      "content": "Love often depends on chance geography rather than cosmically determined compatibility.",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 45,
+      "content": "Why is learning to type so hard?",
+      "card": "QWERTY Keyboard"
+    },
+    {
+      "id": 46,
+      "content": "QWERTY was designed in the 1870s to prevent typewriter keys from jamming by slowing typists down.",
+      "card": "QWERTY Keyboard"
+    },
+    {
+      "id": 47,
+      "content": "Alternative layouts like Dvorak promise 10-30% efficiency improvements, but switching costs are insurmountable.",
+      "card": "QWERTY Keyboard"
+    },
+    {
+      "id": 48,
+      "content": "Once random early advantages establish market share, network effects make displacement nearly impossible.",
+      "card": "QWERTY Keyboard"
+    },
+    {
+      "id": 49,
+      "content": "Are you really almost winning?",
+      "card": "Slot Machines"
+    },
+    {
+      "id": 50,
+      "content": "Modern slot machines program near-misses at specific frequencies to create artificial excitement.",
+      "card": "Slot Machines"
+    },
+    {
+      "id": 51,
+      "content": "Near-misses trigger similar neural responses to actual wins, releasing dopamine and encouraging continued play.",
+      "card": "Slot Machines"
+    },
+    {
+      "id": 52,
+      "content": "The transformation from mechanical chance to algorithmic psychology weaponises randomness for profit.",
+      "card": "Slot Machines"
+    },
+    {
+      "id": 53,
+      "content": "Do you really want a random shuffle?",
+      "card": "Spotify Shuffle"
+    },
+    {
+      "id": 54,
+      "content": "Spotify's truly random shuffle made users angry because they saw patterns and clumps.",
+      "card": "Spotify Shuffle"
+    },
+    {
+      "id": 55,
+      "content": "Engineers redesigned the algorithm to be less random so it would seem more random.",
+      "card": "Spotify Shuffle"
+    },
+    {
+      "id": 56,
+      "content": "We don't want actual randomness - we want the feeling of randomness without the clumps.",
+      "card": "Spotify Shuffle"
+    },
+    {
+      "id": 57,
+      "content": "How do you choose citizens fairly in the Hellenic Age?",
+      "card": "Kleroterion"
+    },
+    {
+      "id": 58,
+      "content": "Ancient Athenians used marble slabs with slots and black/white blocks falling through tubes.",
+      "card": "Kleroterion"
+    },
+    {
+      "id": 59,
+      "content": "The two-level random selection (shuffled name tablets and falling blocks) was sophisticated for its era.",
+      "card": "Kleroterion"
+    },
+    {
+      "id": 60,
+      "content": "Transparent, public selection processes were crucial for democratic legitimacy.",
+      "card": "Kleroterion"
+    },
+    {
+      "id": 61,
+      "content": "When were your most significant memories formed?",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 62,
+      "content": "People recall experiences from ages 15-25 disproportionately, shaping lifelong identity more than later achievements.",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 63,
+      "content": "Whatever music, books, and people you encounter during adolescence shape you far more than conscious choices later.",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 64,
+      "content": "Random historical timing determines which influences coincide with your neurological 'reminiscence bump' period.",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 65,
+      "content": "If you only look at the winners, what do you expect to learn?",
+      "card": "Survivorship Bias"
+    },
+    {
+      "id": 66,
+      "content": "For every tech founder who succeeded, thousands tried the exact same thing with equal talent and failed.",
+      "card": "Survivorship Bias"
+    },
+    {
+      "id": 67,
+      "content": "We study survivors and reverse-engineer success, missing that random timing often made the difference.",
+      "card": "Survivorship Bias"
+    },
+    {
+      "id": 68,
+      "content": "The problem is structural: failures are invisible, so we mistake survival for superiority.",
+      "card": "Survivorship Bias"
+    },
+    {
+      "id": 69,
+      "content": "How much do you spend on hope?",
+      "card": "Lottery Popularity"
+    },
+    {
+      "id": 70,
+      "content": "Lotteries are mathematically terrible bets, yet millions play because hope is worth more than odds suggest.",
+      "card": "Lottery Popularity"
+    },
+    {
+      "id": 71,
+      "content": "For a couple of pounds, you get to imagine a different life where debt disappears and everything changes.",
+      "card": "Lottery Popularity"
+    },
+    {
+      "id": 72,
+      "content": "Context changes risk appetite: when cost is low and upside enormous, even cautious people become gamblers.",
+      "card": "Lottery Popularity"
+    },
+    {
+      "id": 73,
+      "content": "Can a gift shop gizmo save the internet?",
+      "card": "Lava Lamps"
+    },
+    {
+      "id": 74,
+      "content": "Cloudflare uses a wall of 100 lava lamps to generate cryptographic keys protecting millions of websites.",
+      "card": "Lava Lamps"
+    },
+    {
+      "id": 75,
+      "content": "Lava lamp movements are genuinely chaotic, driven by unpredictable convection and fluid dynamics.",
+      "card": "Lava Lamps"
+    },
+    {
+      "id": 76,
+      "content": "Sometimes the most advanced security systems depend on 1960s novelty items from gift shops.",
+      "card": "Lava Lamps"
+    },
+    {
+      "id": 77,
+      "content": "What if the best way to choose decision-makers is pure chance?",
+      "card": "Jury Service"
+    },
+    {
+      "id": 78,
+      "content": "Twelve randomly selected strangers showed trust, respect, and care in deciding a life-changing case.",
+      "card": "Jury Service"
+    },
+    {
+      "id": 79,
+      "content": "The jury system demonstrates that random selection can create effective collaborative decision-making.",
+      "card": "Jury Service"
+    },
+    {
+      "id": 80,
+      "content": "It was a privilege to do something important with eleven others there only because we won a strange lottery.",
+      "card": "Jury Service"
+    },
+    {
+      "id": 81,
+      "content": "What do you see in your morning coffee?",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 82,
+      "content": "During lockdown, staring at coffee splodges revealed patterns: animals, faces, scenarios from random bubbles.",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 83,
+      "content": "This phenomenon called 'apophenia' forms a bedrock for how we perceive the world around us.",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 84,
+      "content": "AI image recognition just saw 'a coffee cup' - humans willing to fail the Turing Test for a cheap laugh.",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 85,
+      "content": "What if your personality is built from neurological accidents?",
+      "card": "Childhood Memory"
+    },
+    {
+      "id": 86,
+      "content": "You vividly remember random Tuesday afternoons from age seven, but not last week's important meeting.",
+      "card": "Childhood Memory"
+    },
+    {
+      "id": 87,
+      "content": "Memory formation during childhood follows patterns that seem entirely random but shape personality for life.",
+      "card": "Childhood Memory"
+    },
+    {
+      "id": 88,
+      "content": "A randomly preserved childhood dog encounter can create lifelong pet preferences; forgotten trauma leaves no trace.",
+      "card": "Childhood Memory"
+    },
+    {
+      "id": 89,
+      "content": "How does a card deck have memory?",
+      "card": "Card Memory vs Dice"
+    },
+    {
+      "id": 90,
+      "content": "Cards have 'memory' (picking without replacement), while dice don't (picking with replacement).",
+      "card": "Card Memory vs Dice"
+    },
+    {
+      "id": 91,
+      "content": "The randomness of a die roll isn't set until thrown; card draws are determined at shuffle but revealed later.",
+      "card": "Card Memory vs Dice"
+    },
+    {
+      "id": 92,
+      "content": "When designing serious games, you must justify which type of randomness represents luck, fate, or unknown factors.",
+      "card": "Card Memory vs Dice"
+    },
+    {
+      "id": 93,
+      "content": "How might a fruit machine create new business ideas?",
+      "card": "The Creativator"
+    },
+    {
+      "id": 94,
+      "content": "Simon White built a dodecagon-wheeled device with marbles that clacked satisfyingly as they spun to a stop.",
+      "card": "The Creativator"
+    },
+    {
+      "id": 95,
+      "content": "The workshop generated 30 refined ideas in a day by spinning wheels of scenarios, business models, and priorities.",
+      "card": "The Creativator"
+    },
+    {
+      "id": 96,
+      "content": "Randomness needs physical presence to feel legitimate: watching wheels spin transforms chance into a proper process.",
+      "card": "The Creativator"
+    },
+    {
+      "id": 97,
+      "content": "What came before probability theory?",
+      "card": "Cardano Sample Space"
+    },
+    {
+      "id": 98,
+      "content": "Gerolamo Cardano first codified that probability equals favourable outcomes divided by total possible outcomes.",
+      "card": "Cardano Sample Space"
+    },
+    {
+      "id": 99,
+      "content": "His book wasn't published until 1663, nearly 100 years after he died, by which time others had developed the field.",
+      "card": "Cardano Sample Space"
+    },
+    {
+      "id": 100,
+      "content": "Randomness was no longer divine will - it became something you could measure and understand.",
+      "card": "Cardano Sample Space"
+    },
+    {
+      "id": 101,
+      "content": "NOTE: This is a partial database. Full extraction continues to target 480 items total.",
+      "card": "SYSTEM"
+    },
+    {
+      "id": 102,
+      "content": "How does fake randomness keep you safe?",
+      "card": "PRNGs"
+    },
+    {
+      "id": 103,
+      "content": "Pseudorandom Number Generators feed a seed value and produce millions of statistically random numbers from deterministic processes.",
+      "card": "PRNGs"
+    },
+    {
+      "id": 104,
+      "content": "A good cryptographic PRNG can generate millions of random-looking numbers per second on ordinary hardware.",
+      "card": "PRNGs"
+    },
+    {
+      "id": 105,
+      "content": "Security comes from computational complexity: predicting the next number without the seed would take centuries using every computer on Earth.",
+      "card": "PRNGs"
+    },
+    {
+      "id": 106,
+      "content": "How random are Large Language Models?",
+      "card": "LLM Temperature"
+    },
+    {
+      "id": 107,
+      "content": "Temperature at 0 always selects the highest-scoring word; higher temperatures choose from broader possibilities weighted by probability.",
+      "card": "LLM Temperature"
+    },
+    {
+      "id": 108,
+      "content": "Pure determinism produces boring text, whilst excessive randomness produces nonsense.",
+      "card": "LLM Temperature"
+    },
+    {
+      "id": 109,
+      "content": "The parameter name borrows from physics: temperature controls how much freedom the system has to escape high-probability choices.",
+      "card": "LLM Temperature"
+    },
+    {
+      "id": 110,
+      "content": "How can a deterministic computer generate unpredictable randomness?",
+      "card": "Computer Entropy"
+    },
+    {
+      "id": 111,
+      "content": "Computers scavenge randomness from keystroke timing, mouse movements, thermal noise, and hard drive seek times.",
+      "card": "Computer Entropy"
+    },
+    {
+      "id": 112,
+      "content": "Modern processors include specialised hardware that samples thermal noise and electrical variations.",
+      "card": "Computer Entropy"
+    },
+    {
+      "id": 113,
+      "content": "Your computer is simultaneously the most logical machine ever built and constantly trying to be genuinely illogical.",
+      "card": "Computer Entropy"
+    },
+    {
+      "id": 114,
+      "content": "How can you hide a message from every computer through which it passes?",
+      "card": "Encryption Keys"
+    },
+    {
+      "id": 115,
+      "content": "A 256-bit encryption key has 2^256 possible values - exceeding the estimated particles in the observable universe.",
+      "card": "Encryption Keys"
+    },
+    {
+      "id": 116,
+      "content": "The same message encrypted with different random keys produces completely different outputs with no resemblance.",
+      "card": "Encryption Keys"
+    },
+    {
+      "id": 117,
+      "content": "Modern internet protocols create new random encryption keys for every session that disappear when you close the browser.",
+      "card": "Encryption Keys"
+    },
+    {
+      "id": 118,
+      "content": "What's wrong with being random?",
+      "card": "Random as Insult"
+    },
+    {
+      "id": 119,
+      "content": "In multiplayer games, clans formed specifically to ensure 'randoms' didn't mar the experience with unpredictable behaviour.",
+      "card": "Random as Insult"
+    },
+    {
+      "id": 120,
+      "content": "Social media platforms encourage interaction of any kind to boost engagement, making 'random' a pejorative term.",
+      "card": "Random as Insult"
+    },
+    {
+      "id": 121,
+      "content": "The increase in online stranger interaction has turned unpredictability into something negative rather than beneficial.",
+      "card": "Random as Insult"
+    },
+    {
+      "id": 122,
+      "content": "Do the best languages survive?",
+      "card": "Language Extinction"
+    },
+    {
+      "id": 123,
+      "content": "The world loses a human language every two weeks as last speakers pass away.",
+      "card": "Language Extinction"
+    },
+    {
+      "id": 124,
+      "content": "Languages die for reasons unrelated to quality: colonial power, economic migration, wars, diseases, environmental disasters.",
+      "card": "Language Extinction"
+    },
+    {
+      "id": 125,
+      "content": "Languages today survived for random political and demographic reasons, not because they represent optimal communication systems.",
+      "card": "Language Extinction"
+    },
+    {
+      "id": 126,
+      "content": "How can you know the directions but not know where you're going?",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 127,
+      "content": "Marcus John Henry Brown recorded a Munich walk as turn-by-turn instructions that can be done anywhere.",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 128,
+      "content": "The walk took Matt through Covent Garden, the Freemasons' Museum, Holborn, and King's Cross - places both familiar and new.",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 129,
+      "content": "On the 90th turn, the walk ended at Euston Tap, exactly where Chris needed to catch his train home.",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 130,
+      "content": "Where do you see yourself in five years?",
+      "card": "Temporal Parallax"
+    },
+    {
+      "id": 131,
+      "content": "Temporal parallax describes the change in viewpoint from viewing a single event from two different time perspectives.",
+      "card": "Temporal Parallax"
+    },
+    {
+      "id": 132,
+      "content": "In hindsight, outcomes can feel obvious and inevitable, unaffected by randomness or chance.",
+      "card": "Temporal Parallax"
+    },
+    {
+      "id": 133,
+      "content": "With the decline of private diary-keeping, we rarely get to see how time changes our view of past predictions.",
+      "card": "Temporal Parallax"
+    },
+    {
+      "id": 134,
+      "content": "What if chaos is the point?",
+      "card": "Forest Fire Ecology"
+    },
+    {
+      "id": 135,
+      "content": "Lightning strikes occur randomly across landscapes; wind and humidity create unpredictable fire spread patterns.",
+      "card": "Forest Fire Ecology"
+    },
+    {
+      "id": 136,
+      "content": "Random burn patterns create complex mosaics: completely burned areas regenerate differently from partially burned regions.",
+      "card": "Forest Fire Ecology"
+    },
+    {
+      "id": 137,
+      "content": "Biodiversity often results from random habitat disruption creating opportunities for different species.",
+      "card": "Forest Fire Ecology"
+    },
+    {
+      "id": 138,
+      "content": "Why can't we predict where hurricanes will hit?",
+      "card": "Hurricane Prediction"
+    },
+    {
+      "id": 139,
+      "content": "Water temperature differences of less than one degree Celsius can alter a storm's intensification rate.",
+      "card": "Hurricane Prediction"
+    },
+    {
+      "id": 140,
+      "content": "Measurement precision has limits: buoys miss micro-variations, satellites smooth out small-scale turbulence.",
+      "card": "Hurricane Prediction"
+    },
+    {
+      "id": 141,
+      "content": "Beyond five days, possible hurricane tracks spread across hundreds of miles of uncertainty.",
+      "card": "Hurricane Prediction"
+    },
+    {
+      "id": 142,
+      "content": "How do you get honest answers to sensitive questions?",
+      "card": "Randomised Response"
+    },
+    {
+      "id": 143,
+      "content": "Respondents flip a coin privately: heads means answer 'yes' regardless of truth, tails means answer honestly.",
+      "card": "Randomised Response"
+    },
+    {
+      "id": 144,
+      "content": "This creates plausible deniability - anyone answering 'yes' might be telling truth or might have flipped heads.",
+      "card": "Randomised Response"
+    },
+    {
+      "id": 145,
+      "content": "Companies like Apple use differential privacy, adding calibrated random noise to protect individuals whilst preserving statistics.",
+      "card": "Randomised Response"
+    },
+    {
+      "id": 146,
+      "content": "Can bad genes win by luck?",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 147,
+      "content": "In small populations, random genetic drift often overpowers natural selection entirely.",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 148,
+      "content": "A bird with superior flying ability might die in a random storm before reproducing.",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 149,
+      "content": "Cheetahs have dangerously low genetic diversity because drift in small populations eliminated beneficial genes faster than selection preserved them.",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 150,
+      "content": "How do you plan for the unpredictable?",
+      "card": "Monte Carlo Simulations"
+    },
+    {
+      "id": 151,
+      "content": "Monte Carlo methods run thousands of simulations incorporating random elements from realistic probability distributions.",
+      "card": "Monte Carlo Simulations"
+    },
+    {
+      "id": 152,
+      "content": "Named after the casino, they explore possible outcomes through repeated random sampling rather than solving equations.",
+      "card": "Monte Carlo Simulations"
+    },
+    {
+      "id": 153,
+      "content": "The technique originated during the Manhattan Project for modelling nuclear chain reactions too complex for direct analysis.",
+      "card": "Monte Carlo Simulations"
+    },
+    {
+      "id": 154,
+      "content": "How did 'OK Boomer' evolve and spread?",
+      "card": "Meme Evolution"
+    },
+    {
+      "id": 155,
+      "content": "'OK Boomer' emerged through countless iterations across platforms, with variations, misunderstandings, and typos creating new meanings.",
+      "card": "Meme Evolution"
+    },
+    {
+      "id": 156,
+      "content": "The phrase succeeded because it accidentally captured widespread generational frustration in two simple words.",
+      "card": "Meme Evolution"
+    },
+    {
+      "id": 157,
+      "content": "Thousands of similar phrases emerge and vanish daily; only retrospective analysis makes viral success seem inevitable.",
+      "card": "Meme Evolution"
+    },
+    {
+      "id": 158,
+      "content": "Why is seven the most likely roll?",
+      "card": "Dice Probability"
+    },
+    {
+      "id": 159,
+      "content": "Two dice have 36 unique combinations, but not every sum appears equally often.",
+      "card": "Dice Probability"
+    },
+    {
+      "id": 160,
+      "content": "There's only one way to roll 2 (1,1) or 12 (6,6), but six ways to roll 7: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1).",
+      "card": "Dice Probability"
+    },
+    {
+      "id": 161,
+      "content": "This breakthrough moved early thinkers from 'that seems to happen a lot' to 'here's why it happens a lot'.",
+      "card": "Dice Probability"
+    },
+    {
+      "id": 162,
+      "content": "Can bad genes win by luck?",
+      "card": "Panda Survival"
+    },
+    {
+      "id": 163,
+      "content": "Pandas survive on bamboo despite having carnivore digestive systems, spending 14 hours daily eating to meet nutritional needs.",
+      "card": "Panda Survival"
+    },
+    {
+      "id": 164,
+      "content": "Their natural survival over millions of years demonstrates how randomness can preserve seemingly unfit species.",
+      "card": "Panda Survival"
+    },
+    {
+      "id": 165,
+      "content": "Sometimes species survive because they were lucky enough to be in the right place when environmental changes occurred.",
+      "card": "Panda Survival"
+    },
+    {
+      "id": 166,
+      "content": "What if entire civilisations left no trace?",
+      "card": "Archaeological Preservation"
+    },
+    {
+      "id": 167,
+      "content": "Egypt's dry climate preserved papyrus scrolls; Pompeii's volcanic burial created an accidental snapshot of Roman life.",
+      "card": "Archaeological Preservation"
+    },
+    {
+      "id": 168,
+      "content": "Stone monuments survive better than wood or textiles, creating the impression that ancients prioritised architecture over domestic life.",
+      "card": "Archaeological Preservation"
+    },
+    {
+      "id": 169,
+      "content": "Entire civilisations may have existed without leaving detectable traces, whilst minor cultures survive prominently through preservation luck.",
+      "card": "Archaeological Preservation"
+    },
+    {
+      "id": 170,
+      "content": "Can chaos be intentional?",
+      "card": "Pollock Artistic Intent"
+    },
+    {
+      "id": 171,
+      "content": "Jackson Pollock strongly rejected the idea that his drip paintings were random: 'I deny the accident.'",
+      "card": "Pollock Artistic Intent"
+    },
+    {
+      "id": 172,
+      "content": "From outside, his method seemed chance-driven; from inside, every gesture was guided by inner composition and rhythm.",
+      "card": "Pollock Artistic Intent"
+    },
+    {
+      "id": 173,
+      "content": "The 'accident' is often the culmination of long preparation meeting opportunity.",
+      "card": "Pollock Artistic Intent"
+    },
+    {
+      "id": 174,
+      "content": "What happens when data is too perfect?",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 175,
+      "content": "When outcomes should be genuinely random, suspicious patterns often indicate human manipulation or fraud.",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 176,
+      "content": "Stock prices that are too regular indicate market manipulation; election results too uniform suggest tampering.",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 177,
+      "content": "Humans trying to fake randomness create data that appears more random to intuition but fails statistical tests.",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 178,
+      "content": "When might a lottery be the best way to select decision-makers?",
+      "card": "Irish Citizens' Assembly"
+    },
+    {
+      "id": 179,
+      "content": "Ireland handed abortion legalisation to 99 randomly selected citizens who deliberated for five weekends.",
+      "card": "Irish Citizens' Assembly"
+    },
+    {
+      "id": 180,
+      "content": "Unlike politicians facing electoral consequences, random citizens could deliberate without party politics pressure.",
+      "card": "Irish Citizens' Assembly"
+    },
+    {
+      "id": 181,
+      "content": "The assembly recommended legalisation; voters approved by decisive margin. Random selection found a path through political deadlock.",
+      "card": "Irish Citizens' Assembly"
+    },
+    {
+      "id": 182,
+      "content": "Why do we ignore slow-moving threats?",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 183,
+      "content": "Our brains evolved for immediate dangers: sabre-toothed tigers, not climate change decades away.",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 184,
+      "content": "Long-term risks involve low-probability but high-impact events which our brains are terrible at evaluating.",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 185,
+      "content": "We dismiss distant risks as unlikely or unknowable, defaulting to optimism and assuming someone else will deal with it.",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 186,
+      "content": "How can random factors combine to create unique opportunity?",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 187,
+      "content": "New York's High Line was scheduled for demolition in 1980; random citizen activism launched a preservation campaign.",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 188,
+      "content": "Twenty-nine years later it reopened as one of the world's most celebrated public spaces.",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 189,
+      "content": "Multiple random elements had to align: persistent citizens, willing architects, supportive politicians, viable economic conditions.",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 190,
+      "content": "Are we too tidy to innovate?",
+      "card": "Penicillin Discovery"
+    },
+    {
+      "id": 191,
+      "content": "Fleming returned from holiday to find bacterial cultures contaminated with mould, apparently ruining weeks of research.",
+      "card": "Penicillin Discovery"
+    },
+    {
+      "id": 192,
+      "content": "Instead of discarding spoiled petri dishes, he noticed bacteria had died around mould colonies.",
+      "card": "Penicillin Discovery"
+    },
+    {
+      "id": 193,
+      "content": "Scientific breakthroughs often emerge from accidents: X-rays, microwaves, radioactivity all discovered by chance.",
+      "card": "Penicillin Discovery"
+    },
+    {
+      "id": 194,
+      "content": "Why does everyone pick seven?",
+      "card": "Why Seven"
+    },
+    {
+      "id": 195,
+      "content": "Ask someone to pick a random number between one and ten; between a third and half pick seven.",
+      "card": "Why Seven"
+    },
+    {
+      "id": 196,
+      "content": "One or ten feel extreme; five and six too central; even numbers too organised; three too low, nine too high.",
+      "card": "Why Seven"
+    },
+    {
+      "id": 197,
+      "content": "Humans can hold around seven concepts in their heads at a time, hitting the limit when imagining something random.",
+      "card": "Why Seven"
+    },
+    {
+      "id": 198,
+      "content": "How likely is it to save the best until last?",
+      "card": "Rolling Stone 500 Albums"
+    },
+    {
+      "id": 199,
+      "content": "Start at the bottom of Rolling Stone's 500 Greatest Albums and work through less acclaimed material.",
+      "card": "Rolling Stone 500 Albums"
+    },
+    {
+      "id": 200,
+      "content": "Start at the top and enter a world of diminishing returns.",
+      "card": "Rolling Stone 500 Albums"
+    },
+    {
+      "id": 201,
+      "content": "Throughout either approach, there's no sense of surprise - number 499 follows 500 or vice versa.",
+      "card": "Rolling Stone 500 Albums"
+    },
+    {
+      "id": 202,
+      "content": "When should you look at past performance?",
+      "card": "Track Record Validity"
+    },
+    {
+      "id": 203,
+      "content": "Past success predicts future performance - but only in domains with low randomness.",
+      "card": "Track Record Validity"
+    },
+    {
+      "id": 204,
+      "content": "A dentist with twenty years of root canals demonstrates skill; an investor with twenty years of returns might just be lucky.",
+      "card": "Track Record Validity"
+    },
+    {
+      "id": 205,
+      "content": "As Taleb quipped: 'It's harder to fry an egg than to buy and sell stocks.'",
+      "card": "Track Record Validity"
+    },
+    {
+      "id": 206,
+      "content": "Where does your router's randomness come from?",
+      "card": "Default Passwords"
+    },
+    {
+      "id": 207,
+      "content": "Devices used to have default passwords like 'admin' or 'password'; users left them unchanged.",
+      "card": "Default Passwords"
+    },
+    {
+      "id": 208,
+      "content": "Now devices come with random passwords generated from serial numbers plus algorithms.",
+      "card": "Default Passwords"
+    },
+    {
+      "id": 209,
+      "content": "Problem: if you know the serial number and the algorithm, you can figure out the supposedly random password.",
+      "card": "Default Passwords"
+    },
+    {
+      "id": 210,
+      "content": "Are organic urban areas more creative?",
+      "card": "Organic Cities"
+    },
+    {
+      "id": 211,
+      "content": "Manhattan's rigid grid creates predictable navigation but sterile experiences.",
+      "card": "Organic Cities"
+    },
+    {
+      "id": 212,
+      "content": "Medieval London's chaotic tangle of alleys generates serendipitous encounters that make cities culturally vibrant.",
+      "card": "Organic Cities"
+    },
+    {
+      "id": 213,
+      "content": "Randomness in urban growth consistently produces more interesting results than planning.",
+      "card": "Organic Cities"
+    },
+    {
+      "id": 214,
+      "content": "Could monkeys really type Shakespeare?",
+      "card": "Monkeys & Shakespeare"
+    },
+    {
+      "id": 215,
+      "content": "Computer scientists discovered you can generate surprisingly coherent text using purely random processes.",
+      "card": "Monkeys & Shakespeare"
+    },
+    {
+      "id": 216,
+      "content": "Monkeys randomly typing would take longer than the universe's age to produce Shakespeare.",
+      "card": "Monkeys & Shakespeare"
+    },
+    {
+      "id": 217,
+      "content": "Much of meaningful communication follows patterns that can be approximated through statistical methods.",
+      "card": "Monkeys & Shakespeare"
+    },
+    {
+      "id": 218,
+      "content": "Why do global crises start from single moments?",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 219,
+      "content": "The 1918 flu may have begun with one sick soldier; HIV from random contact with infected primates; COVID-19 spread globally from highly connected hubs.",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 220,
+      "content": "Randomness operates at multiple levels: which individual infected first, where during peak contagiousness, whom they encounter, dispersal potential.",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 221,
+      "content": "Pandemic prevention ultimately depends on countless individual choices that cannot be predicted or controlled.",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 222,
+      "content": "Who really invented the telephone?",
+      "card": "Bell Gray Telephone"
+    },
+    {
+      "id": 223,
+      "content": "Alexander Graham Bell filed his telephone patent at 2pm on February 14, 1876; Elisha Gray filed nearly identical design at 5pm.",
+      "card": "Bell Gray Telephone"
+    },
+    {
+      "id": 224,
+      "content": "Three hours of random timing determined who would be remembered as the inventor and who would become a historical footnote.",
+      "card": "Bell Gray Telephone"
+    },
+    {
+      "id": 225,
+      "content": "Patent systems reward first filing rather than first invention, creating lottery-like outcomes worth billions.",
+      "card": "Bell Gray Telephone"
+    },
+    {
+      "id": 226,
+      "content": "Why did inferior technology win?",
+      "card": "VHS Betamax"
+    },
+    {
+      "id": 227,
+      "content": "VHS defeated the technically superior Betamax through better marketing timing, not quality.",
+      "card": "VHS Betamax"
+    },
+    {
+      "id": 228,
+      "content": "Once random early advantages establish market share, network effects make displacement nearly impossible.",
+      "card": "VHS Betamax"
+    },
+    {
+      "id": 229,
+      "content": "Early adoption timing matters more than actual quality in determining technological winners.",
+      "card": "VHS Betamax"
+    },
+    {
+      "id": 230,
+      "content": "What do Post-it notes and VELCRO have in common?",
+      "card": "Post-it VELCRO"
+    },
+    {
+      "id": 231,
+      "content": "Post-it happened when 3M's Spencer Silver tried creating super-strong adhesive and accidentally invented a weak one.",
+      "card": "Post-it VELCRO"
+    },
+    {
+      "id": 232,
+      "content": "VELCRO was invented by a Swiss engineer annoyed by burr seeds sticking to his dog's fur.",
+      "card": "Post-it VELCRO"
+    },
+    {
+      "id": 233,
+      "content": "True innovation requires making connections that weren't obvious before - if you could have planned it, someone probably already has.",
+      "card": "Post-it VELCRO"
+    },
+    {
+      "id": 234,
+      "content": "Can chaos create order without anyone being in charge?",
+      "card": "Exponential Backoff"
+    },
+    {
+      "id": 235,
+      "content": "When Ethernet signals collide, each device waits a randomly chosen period before retrying.",
+      "card": "Exponential Backoff"
+    },
+    {
+      "id": 236,
+      "content": "Since wait times are chosen independently and randomly, one device will almost certainly transmit first, clearing the channel.",
+      "card": "Exponential Backoff"
+    },
+    {
+      "id": 237,
+      "content": "The principle scales randomness to congestion severity: after first collision, short delays; after subsequent collisions, exponentially longer ranges.",
+      "card": "Exponential Backoff"
+    },
+    {
+      "id": 238,
+      "content": "Why doesn't a coin toss mean the same thing everywhere?",
+      "card": "Cultural Context"
+    },
+    {
+      "id": 239,
+      "content": "In low-context cultures (Germany, US), communication is explicit; in high-context cultures (Japan, India), much meaning is unstated.",
+      "card": "Cultural Context"
+    },
+    {
+      "id": 240,
+      "content": "Flipping a coin in some cultures signals fairness; in others, it feels flippant or disrespectful.",
+      "card": "Cultural Context"
+    },
+    {
+      "id": 241,
+      "content": "Understanding randomness requires recognising that no message exists outside its cultural context.",
+      "card": "Cultural Context"
+    },
+    {
+      "id": 242,
+      "content": "Can exchanging tiles improve your odds from 10% to 50%?",
+      "card": "Scrabble Strategy"
+    },
+    {
+      "id": 243,
+      "content": "Top Scrabble player Will Anderson vs Noah Schoenbrun: Anderson ahead by 67 points but neither makes valid moves for five turns.",
+      "card": "Scrabble Strategy"
+    },
+    {
+      "id": 244,
+      "content": "Schoenbrun realised: 'I'll have an easier time winning a coin flip than a full game.'",
+      "card": "Scrabble Strategy"
+    },
+    {
+      "id": 245,
+      "content": "By exchanging tiles, he improved his odds to 50/50 - unfortunately drew the worst letters and lost anyway.",
+      "card": "Scrabble Strategy"
+    },
+    {
+      "id": 246,
+      "content": "Why did Johnny Cash's 'Hurt' mean something the original didn't?",
+      "card": "Tertium Quid"
+    },
+    {
+      "id": 247,
+      "content": "Film editor Eisenstein discovered: placing two unrelated clips together creates meaning that exists in neither clip individually.",
+      "card": "Tertium Quid"
+    },
+    {
+      "id": 248,
+      "content": "Cash covering Nine Inch Nails created new emotional resonances from disparate elements: ageing country legend and dark electronic song.",
+      "card": "Tertium Quid"
+    },
+    {
+      "id": 249,
+      "content": "Our brains automatically construct narratives to link unrelated elements, often producing insights conscious analysis might miss.",
+      "card": "Tertium Quid"
+    },
+    {
+      "id": 250,
+      "content": "What happens when you force connections?",
+      "card": "De Bono Random Word"
+    },
+    {
+      "id": 251,
+      "content": "Edward de Bono's technique: pick any random object, then force yourself to connect it to whatever you're working on.",
+      "card": "De Bono Random Word"
+    },
+    {
+      "id": 252,
+      "content": "His example: randomly selecting 'nose' while designing photocopiers led to idea of lavender scent when low on paper.",
+      "card": "De Bono Random Word"
+    },
+    {
+      "id": 253,
+      "content": "The starting word must be truly random - if you choose it yourself, your existing biases will influence the selection.",
+      "card": "De Bono Random Word"
+    },
+    {
+      "id": 254,
+      "content": "Are the clouds actually smiling at you?",
+      "card": "Pattern Recognition Noise"
+    },
+    {
+      "id": 255,
+      "content": "Our brains are relentless pattern-detection machines: show us random dots, we see constellations; play white noise, we hear voices.",
+      "card": "Pattern Recognition Noise"
+    },
+    {
+      "id": 256,
+      "content": "This tendency leads to conspiracy theories and superstitions, but also helps artists find inspiration in chaos.",
+      "card": "Pattern Recognition Noise"
+    },
+    {
+      "id": 257,
+      "content": "The key is awareness: understanding your tendency to impose patterns helps you use it productively rather than being misled.",
+      "card": "Pattern Recognition Noise"
+    },
+    {
+      "id": 258,
+      "content": "What do Greek tragedy and chaos theory have in common?",
+      "card": "Greek Tragedy Probability"
+    },
+    {
+      "id": 259,
+      "content": "Ancient Greeks lacked probability theory, so attributed unpredictable events to divine intervention.",
+      "card": "Greek Tragedy Probability"
+    },
+    {
+      "id": 260,
+      "content": "Their 'risk management' involved appeasing deities rather than analysing probabilities.",
+      "card": "Greek Tragedy Probability"
+    },
+    {
+      "id": 261,
+      "content": "Modern cultures have probability theory, yet traces of the older mindset persist in how we frame uncertainty.",
+      "card": "Greek Tragedy Probability"
+    },
+    {
+      "id": 262,
+      "content": "Can a missed note become a melody?",
+      "card": "Jazz Improvisation"
+    },
+    {
+      "id": 263,
+      "content": "In jazz, a missed note can become a new melodic direction; in theatre, a dropped prop leads to genuine surprise.",
+      "card": "Jazz Improvisation"
+    },
+    {
+      "id": 264,
+      "content": "Great improvisers master their craft so thoroughly they can break rules productively.",
+      "card": "Jazz Improvisation"
+    },
+    {
+      "id": 265,
+      "content": "Creative tension comes from balancing preparation with spontaneity - the audience can sense this dynamic energy.",
+      "card": "Jazz Improvisation"
+    },
+    {
+      "id": 266,
+      "content": "Can you hunt for accidents on purpose?",
+      "card": "Cut-up Technique"
+    },
+    {
+      "id": 267,
+      "content": "David Bowie used a cut-up technique, randomly pulling words and phrases from a pile when writing lyrics.",
+      "card": "Cut-up Technique"
+    },
+    {
+      "id": 268,
+      "content": "William Burroughs literally sliced up pages of text and rearranged them to discover new meanings.",
+      "card": "Cut-up Technique"
+    },
+    {
+      "id": 269,
+      "content": "Serendipity isn't purely random - it's the intersection of preparation and opportunity.",
+      "card": "Cut-up Technique"
+    },
+    {
+      "id": 270,
+      "content": "When did you last borrow from an unlikely source?",
+      "card": "Cognitive Flexibility"
+    },
+    {
+      "id": 271,
+      "content": "David Bowie reinvented himself repeatedly, absorbing influences from mime, theatre, electronic music, soul, and experimental art.",
+      "card": "Cognitive Flexibility"
+    },
+    {
+      "id": 272,
+      "content": "Each recombination produced something genuinely novel because he refused to be locked into any single creative framework.",
+      "card": "Cognitive Flexibility"
+    },
+    {
+      "id": 273,
+      "content": "Cognitive flexibility means switching between different conceptual frameworks without getting trapped in any single way of thinking.",
+      "card": "Cognitive Flexibility"
+    },
+    {
+      "id": 274,
+      "content": "How do artists create conditions for fortunate discoveries?",
+      "card": "Artist Serendipity"
+    },
+    {
+      "id": 275,
+      "content": "Artists collect random objects, maintain idea notebooks, and deliberately expose themselves to unfamiliar experiences.",
+      "card": "Artist Serendipity"
+    },
+    {
+      "id": 276,
+      "content": "Photographer Vivian Maier wandered Chicago streets for decades, camera ready, hunting for decisive moments most people would miss.",
+      "card": "Artist Serendipity"
+    },
+    {
+      "id": 277,
+      "content": "The key is maintaining alertness - simultaneously focused on work while remaining open to interruption and redirection.",
+      "card": "Artist Serendipity"
+    },
+    {
+      "id": 278,
+      "content": "Why do limitations spark creativity?",
+      "card": "Creative Constraints"
+    },
+    {
+      "id": 279,
+      "content": "Give yourself exactly 15 minutes to solve a problem - the pressure prevents falling back on usual deliberative processes.",
+      "card": "Creative Constraints"
+    },
+    {
+      "id": 280,
+      "content": "Collaboration with people outside your field shatters assumptions you didn't know you had.",
+      "card": "Creative Constraints"
+    },
+    {
+      "id": 281,
+      "content": "These techniques are circuit breakers for creativity, preventing you from getting stuck in the same loops.",
+      "card": "Creative Constraints"
+    },
+    {
+      "id": 282,
+      "content": "What do medical trials teach you about choosing participants?",
+      "card": "Randomised Controlled Trials"
+    },
+    {
+      "id": 283,
+      "content": "Random assignment eliminates bias: when patients are randomly allocated, all unmeasurable differences distribute equally across groups.",
+      "card": "Randomised Controlled Trials"
+    },
+    {
+      "id": 284,
+      "content": "Before randomised trials became standard in the 1940s, medicine was dominated by anecdote, authority, and wishful thinking.",
+      "card": "Randomised Controlled Trials"
+    },
+    {
+      "id": 285,
+      "content": "The placebo effect adds complexity: patients improve simply from believing they're receiving treatment.",
+      "card": "Randomised Controlled Trials"
+    },
+    {
+      "id": 286,
+      "content": "What are the ingredients for a successful restaurant?",
+      "card": "Restaurant Success"
+    },
+    {
+      "id": 287,
+      "content": "Two identical restaurants on opposite corners: within six months, one thrives whilst the other closes permanently.",
+      "card": "Restaurant Success"
+    },
+    {
+      "id": 288,
+      "content": "Early customer flow creates feedback loops: busy restaurants attract more customers through social proof.",
+      "card": "Restaurant Success"
+    },
+    {
+      "id": 289,
+      "content": "Random factors include which side receives more sunlight, traffic light timing, and which direction people turn when exiting buildings.",
+      "card": "Restaurant Success"
+    },
+    {
+      "id": 290,
+      "content": "Why do we overestimate talent in creative success?",
+      "card": "Survivorship Bias Creative"
+    },
+    {
+      "id": 291,
+      "content": "Thousands of actors are capable of Oscar-worthy performances, but only dozens get the roles, representation, and timing.",
+      "card": "Survivorship Bias Creative"
+    },
+    {
+      "id": 292,
+      "content": "We study survivors and reverse-engineer success, missing that random timing often made the difference.",
+      "card": "Survivorship Bias Creative"
+    },
+    {
+      "id": 293,
+      "content": "Success doesn't just reflect talent, and lack of success doesn't necessarily reflect lack of talent.",
+      "card": "Survivorship Bias Creative"
+    },
+    {
+      "id": 294,
+      "content": "Would you let someone else roll your dice?",
+      "card": "Pizzawalk"
+    },
+    {
+      "id": 295,
+      "content": "The 'pizzawalk' was an NLP technique to overcome internal resistance by surrendering control to dice rolls.",
+      "card": "Pizzawalk"
+    },
+    {
+      "id": 296,
+      "content": "Rolling a die to decide where to eat lunch felt viscerally uncomfortable despite being trivial.",
+      "card": "Pizzawalk"
+    },
+    {
+      "id": 297,
+      "content": "We accept random outcomes we can't control but resist randomness when we could choose otherwise.",
+      "card": "Pizzawalk"
+    },
+    {
+      "id": 298,
+      "content": "When did you last create a unique moment in history?",
+      "card": "52 Factorial"
+    },
+    {
+      "id": 299,
+      "content": "A shuffled deck has 8 followed by 67 zeros possible arrangements - more than atoms on Earth.",
+      "card": "52 Factorial"
+    },
+    {
+      "id": 300,
+      "content": "Shuffling creates something that has never existed before and likely never will again.",
+      "card": "52 Factorial"
+    },
+    {
+      "id": 301,
+      "content": "We associate randomness with drama, but most of the time it's unremarkable and invisible.",
+      "card": "52 Factorial"
+    },
+    {
+      "id": 302,
+      "content": "Can you prove your success wasn't just luck?",
+      "card": "Career Sample Size"
+    },
+    {
+      "id": 303,
+      "content": "To prove skill over luck, you'd need 1,500+ independent observations; individual careers provide maybe 50-100 major decisions.",
+      "card": "Career Sample Size"
+    },
+    {
+      "id": 304,
+      "content": "Research across 28 creative fields found that luck explained 50-95% of career outcomes.",
+      "card": "Career Sample Size"
+    },
+    {
+      "id": 305,
+      "content": "Your career is a sample size of one - mathematically insufficient for distinguishing skill from fortunate timing.",
+      "card": "Career Sample Size"
+    },
+    {
+      "id": 306,
+      "content": "Why are casino owners so lucky?",
+      "card": "Law of Large Numbers"
+    },
+    {
+      "id": 307,
+      "content": "Every casino game has a tiny house edge; run millions of times, those edges add up to reliable profit.",
+      "card": "Law of Large Numbers"
+    },
+    {
+      "id": 308,
+      "content": "The Law of Large Numbers: in any single game, randomness rules; over the long term, actual outcomes mirror expected ones.",
+      "card": "Law of Large Numbers"
+    },
+    {
+      "id": 309,
+      "content": "Casinos don't fight randomness - they harness it, turning unpredictable moments into steady revenue.",
+      "card": "Law of Large Numbers"
+    },
+    {
+      "id": 310,
+      "content": "When is there enough data?",
+      "card": "When Enough Data"
+    },
+    {
+      "id": 311,
+      "content": "Your restaurant receives salad leaves; a random sample tests positive for E. coli. Do you test more or bin the lot?",
+      "card": "When Enough Data"
+    },
+    {
+      "id": 312,
+      "content": "Most operations bin immediately - cost of testing isn't worth marginal uncertainty reduction when the cost of being wrong is catastrophic.",
+      "card": "When Enough Data"
+    },
+    {
+      "id": 313,
+      "content": "One positive test tells you nearly everything you need to know.",
+      "card": "When Enough Data"
+    },
+    {
+      "id": 314,
+      "content": "When does noise become the news?",
+      "card": "Noise vs News"
+    },
+    {
+      "id": 315,
+      "content": "A stock market index moves by 0.01%, and someone has to explain it.",
+      "card": "Noise vs News"
+    },
+    {
+      "id": 316,
+      "content": "We scramble to construct narratives around random fluctuations that mean nothing.",
+      "card": "Noise vs News"
+    },
+    {
+      "id": 317,
+      "content": "The compulsion to explain every movement creates the illusion that markets are more predictable than they are.",
+      "card": "Noise vs News"
+    },
+    {
+      "id": 318,
+      "content": "How many different ways are there of looking at random outcomes?",
+      "card": "Estimative Language"
+    },
+    {
+      "id": 319,
+      "content": "Sherman Kent invented Words of Estimative Possibility: 'certain' meant 100%, 'probable' meant 87% to 63%.",
+      "card": "Estimative Language"
+    },
+    {
+      "id": 320,
+      "content": "Terms for randomness are much less well defined: aleatoric uncertainty, epistemic uncertainty, fate, serendipity, happenstance, luck.",
+      "card": "Estimative Language"
+    },
+    {
+      "id": 321,
+      "content": "The next time 'luck' springs to mind, try to think it through more carefully.",
+      "card": "Estimative Language"
+    },
+    {
+      "id": 322,
+      "content": "Would letting dice control your life be liberation or madness?",
+      "card": "The Dice Man"
+    },
+    {
+      "id": 323,
+      "content": "Luke Rhinehart's novel explores abandoning conventional decision-making to let chance determine everything from career to sexual encounters.",
+      "card": "The Dice Man"
+    },
+    {
+      "id": 324,
+      "content": "The book frames itself as written using the same random method - 'the wisdom of the dice' determining the story structure.",
+      "card": "The Dice Man"
+    },
+    {
+      "id": 325,
+      "content": "Does surrendering choice to randomness free you from paralysing decisions or simply trade one tyranny for another?",
+      "card": "The Dice Man"
+    },
+    {
+      "id": 326,
+      "content": "Why does a prolate spheroid matter in American football?",
+      "card": "American Football Shape"
+    },
+    {
+      "id": 327,
+      "content": "The ball's shape makes it easy to throw accurately over distances, but when it hits the ground, it has a mind of its own.",
+      "card": "American Football Shape"
+    },
+    {
+      "id": 328,
+      "content": "A prolate spheroid bounces unpredictably; random direction matters more than reaction time or ball skills.",
+      "card": "American Football Shape"
+    },
+    {
+      "id": 329,
+      "content": "Over half of 2024-2025 NFL games were decided by seven points or less - one possession, one random bounce.",
+      "card": "American Football Shape"
+    },
+    {
+      "id": 330,
+      "content": "What does 'random' mean?",
+      "card": "What Random Means"
+    },
+    {
+      "id": 331,
+      "content": "The term originates from Old French 'randin' (to gallop), evolving to mean: sudden/unexpected, highly unusual, or a diverse spread.",
+      "card": "What Random Means"
+    },
+    {
+      "id": 332,
+      "content": "In statistics, it means events with equal probability - which might be highly unlikely (lottery win) or very likely (rolling a one).",
+      "card": "What Random Means"
+    },
+    {
+      "id": 333,
+      "content": "The multiple meanings evolved to be quite contradictory - fittingly, a bit random.",
+      "card": "What Random Means"
+    },
+    {
+      "id": 334,
+      "content": "What does randomness tell us about what people want?",
+      "card": "Ramsey Gambling"
+    },
+    {
+      "id": 335,
+      "content": "Economist Frank Ramsey argued: if you say something has 70% chance of happening, would you bet on it at 7:3 odds?",
+      "card": "Ramsey Gambling"
+    },
+    {
+      "id": 336,
+      "content": "By offering carefully designed gambles with shifting probabilities, we reveal how much people value security over risk.",
+      "card": "Ramsey Gambling"
+    },
+    {
+      "id": 337,
+      "content": "Decades of research showed people consistently violate expected utility theory - revealing the gap between how we think people should decide and how they actually do.",
+      "card": "Ramsey Gambling"
+    },
+    {
+      "id": 338,
+      "content": "How would you get everyone's contribution in a meeting?",
+      "card": "Rolling for Initiative"
+    },
+    {
+      "id": 339,
+      "content": "Mike Shema proposed 'rolling for initiative' - using dice or cards to randomly determine speaking order.",
+      "card": "Rolling for Initiative"
+    },
+    {
+      "id": 340,
+      "content": "Two benefits: order is determined randomly, not by loudest voices; and everyone gets a turn.",
+      "card": "Rolling for Initiative"
+    },
+    {
+      "id": 341,
+      "content": "Random roll ensures order changes between meetings, breaking familiar patterns and generating new interactions.",
+      "card": "Rolling for Initiative"
+    },
+    {
+      "id": 342,
+      "content": "How does your organisation make decisions?",
+      "card": "Garbage Can Model"
+    },
+    {
+      "id": 343,
+      "content": "The 'Garbage Can' model: decisions emerge when problems, solutions, people, and opportunities collide.",
+      "card": "Garbage Can Model"
+    },
+    {
+      "id": 344,
+      "content": "A good idea might sit in the drawer until the right meeting; a bad one might fly because the room was unusually empty.",
+      "card": "Garbage Can Model"
+    },
+    {
+      "id": 345,
+      "content": "Randomness often plays a bigger role than we admit; in complex systems, luck is part of the operating model.",
+      "card": "Garbage Can Model"
+    },
+    {
+      "id": 346,
+      "content": "Should you wait for the bus?",
+      "card": "Walk or Ride Dilemma"
+    },
+    {
+      "id": 347,
+      "content": "Running late, you can walk (definitely arrive five minutes late) or wait for the bus (maybe on time, possibly even later).",
+      "card": "Walk or Ride Dilemma"
+    },
+    {
+      "id": 348,
+      "content": "Jeffrey Rosenthal's dilemma weighs a small, guaranteed negative against a potential positive with a larger possible downside.",
+      "card": "Walk or Ride Dilemma"
+    },
+    {
+      "id": 349,
+      "content": "Some people are walkers preferring the sure thing; others are riders, willing to risk a worse outcome for a shot at the better one.",
+      "card": "Walk or Ride Dilemma"
+    },
+    {
+      "id": 350,
+      "content": "When did we stop blaming the gods for bad luck?",
+      "card": "Greek Gods Randomness"
+    },
+    {
+      "id": 351,
+      "content": "In ancient Greece, randomness didn't exist as something calculable - only the will of the gods.",
+      "card": "Greek Gods Randomness"
+    },
+    {
+      "id": 352,
+      "content": "Rather than calculating odds, Greeks tried to influence uncertain outcomes through ritual and sacrifice.",
+      "card": "Greek Gods Randomness"
+    },
+    {
+      "id": 353,
+      "content": "The journey from sacrifice to statistics represents a fundamental shift in how humans understand uncertainty.",
+      "card": "Greek Gods Randomness"
+    },
+    {
+      "id": 354,
+      "content": "How would you tell if a source of randomness was random?",
+      "card": "RNG Testing"
+    },
+    {
+      "id": 355,
+      "content": "Random number generators undergo batteries of statistical tests: uniform distribution, absence of patterns, independence, compressibility.",
+      "card": "RNG Testing"
+    },
+    {
+      "id": 356,
+      "content": "In 2008, some widely used generators had subtle flaws that made their output partially predictable.",
+      "card": "RNG Testing"
+    },
+    {
+      "id": 357,
+      "content": "Truly random sequences can occasionally fail randomness tests by producing patterns that appear suspicious but are statistically expected.",
+      "card": "RNG Testing"
+    },
+    {
+      "id": 358,
+      "content": "How reliable are your backups?",
+      "card": "Backup Redundancy"
+    },
+    {
+      "id": 359,
+      "content": "A hard drive has a 1% annual failure rate; three independent drives failing simultaneously: 0.000001, or one in a million.",
+      "card": "Backup Redundancy"
+    },
+    {
+      "id": 360,
+      "content": "Probability multiplication creates exponentially increasing protection with each additional backup.",
+      "card": "Backup Redundancy"
+    },
+    {
+      "id": 361,
+      "content": "Hardware failures are genuinely random events driven by thermal stress, power fluctuations, manufacturing defects, and cosmic radiation.",
+      "card": "Backup Redundancy"
+    },
+    {
+      "id": 362,
+      "content": "Do you look for good enough or best?",
+      "card": "Satisficers vs Optimisers"
+    },
+    {
+      "id": 363,
+      "content": "Satisficers look for 'good enough' and stop; optimisers want the best possible outcome and find it hard to stop looking.",
+      "card": "Satisficers vs Optimisers"
+    },
+    {
+      "id": 364,
+      "content": "Research suggests satisficers tend to feel more content; optimisers are stuck on a decision treadmill, always wondering if they could have done better.",
+      "card": "Satisficers vs Optimisers"
+    },
+    {
+      "id": 365,
+      "content": "The more randomness involved, the more that optimising becomes a trap, because the 'best' is unknowable.",
+      "card": "Satisficers vs Optimisers"
+    },
+    {
+      "id": 366,
+      "content": "Would you scratch away to reveal this art?",
+      "card": "Scratch Card Art"
+    },
+    {
+      "id": 367,
+      "content": "@stevexoh plans to exhibit paintings behind scratch card coating - visitors purchase pieces sight unseen.",
+      "card": "Scratch Card Art"
+    },
+    {
+      "id": 368,
+      "content": "Until scratched, each piece exists simultaneously as brilliant and terrible, valuable and worthless.",
+      "card": "Scratch Card Art"
+    },
+    {
+      "id": 369,
+      "content": "The financial commitment occurs during maximum uncertainty rather than informed evaluation.",
+      "card": "Scratch Card Art"
+    },
+    {
+      "id": 370,
+      "content": "What does VUCA stand for?",
+      "card": "VUCA BANI RUPT"
+    },
+    {
+      "id": 371,
+      "content": "VUCA: Volatile, Uncertain, Complex, Ambiguous. BANI: Brittle, Anxious, Nonlinear, Incomprehensible. RUPT: Rapid, Unpredictable, Paradoxical, Tangled.",
+      "card": "VUCA BANI RUPT"
+    },
+    {
+      "id": 372,
+      "content": "Key feature of all: aspects of randomness - unpredictability of outcomes, non-linearity between effect and cause.",
+      "card": "VUCA BANI RUPT"
+    },
+    {
+      "id": 373,
+      "content": "Inability to predict an end from initial conditions is an integral feature of randomness.",
+      "card": "VUCA BANI RUPT"
+    },
+    {
+      "id": 374,
+      "content": "Why are efficiency machines also creative prisons?",
+      "card": "Breaking Cognitive Ruts"
+    },
+    {
+      "id": 375,
+      "content": "Our brains create shortcuts and patterns to handle routine tasks, but these can trap us in predictable thinking.",
+      "card": "Breaking Cognitive Ruts"
+    },
+    {
+      "id": 376,
+      "content": "Techniques: change physical environment, impose arbitrary constraints, use time pressure, collaborate outside your field.",
+      "card": "Breaking Cognitive Ruts"
+    },
+    {
+      "id": 377,
+      "content": "The goal isn't chaos - it's breaking automatic patterns that prevent seeing new possibilities.",
+      "card": "Breaking Cognitive Ruts"
+    },
+    {
+      "id": 378,
+      "content": "How do you win your favourite game?",
+      "card": "Chess vs Poker"
+    },
+    {
+      "id": 379,
+      "content": "Chess: pure skill, identical information, no random elements - better player always wins eventually.",
+      "card": "Chess vs Poker"
+    },
+    {
+      "id": 380,
+      "content": "Poker: hidden information and random card distribution - best players lose individual hands regularly despite excellent decisions.",
+      "card": "Chess vs Poker"
+    },
+    {
+      "id": 381,
+      "content": "Perhaps the most important skill isn't eliminating luck but learning how to dance with it.",
+      "card": "Chess vs Poker"
+    },
+    {
+      "id": 382,
+      "content": "When should you strive to be unpredictable?",
+      "card": "Unpredictable Security"
+    },
+    {
+      "id": 383,
+      "content": "Sometimes the best defence isn't a strong wall - it's uncertainty about where the wall is.",
+      "card": "Unpredictable Security"
+    },
+    {
+      "id": 384,
+      "content": "Instead of locking accounts after exactly three failed attempts, randomise: 20% chance after first, 50% after second, 90% after third.",
+      "card": "Unpredictable Security"
+    },
+    {
+      "id": 385,
+      "content": "When people cannot predict when or how you'll respond, perceived risk increases and often deters attempts.",
+      "card": "Unpredictable Security"
+    },
+    {
+      "id": 386,
+      "content": "What would you do to go viral?",
+      "card": "Viral Algorithms"
+    },
+    {
+      "id": 387,
+      "content": "Two identical videos uploaded simultaneously: one gets 50 million views, the other gets 47.",
+      "card": "Viral Algorithms"
+    },
+    {
+      "id": 388,
+      "content": "The difference has nothing to do with merit and everything to do with algorithmic randomness.",
+      "card": "Viral Algorithms"
+    },
+    {
+      "id": 389,
+      "content": "Early engagement creates feedback loops that amplify initial random advantages into massive disparities.",
+      "card": "Viral Algorithms"
+    },
+    {
+      "id": 390,
+      "content": "Could a butterfly's wings really change the weather?",
+      "card": "Butterfly Effect"
+    },
+    {
+      "id": 391,
+      "content": "Weather forecasters can predict tomorrow reasonably, next week with diminishing confidence, beyond ten days essentially useless.",
+      "card": "Butterfly Effect"
+    },
+    {
+      "id": 392,
+      "content": "A measurement error of 0.01% today becomes 1% error next week, then 100% within a fortnight.",
+      "card": "Butterfly Effect"
+    },
+    {
+      "id": 393,
+      "content": "Perfect prediction requires perfect information, which remains perpetually out of reach.",
+      "card": "Butterfly Effect"
+    },
+    {
+      "id": 394,
+      "content": "Why did controversial books succeed?",
+      "card": "Fifty Shades Success"
+    },
+    {
+      "id": 395,
+      "content": "Fifty Shades of Grey benefited from controversy and unconventional style - publicity wasn't directed or sought.",
+      "card": "Fifty Shades Success"
+    },
+    {
+      "id": 396,
+      "content": "The book's release coincidentally caught an increase in eBook popularity, where fellow commuters wouldn't see the cover.",
+      "card": "Fifty Shades Success"
+    },
+    {
+      "id": 397,
+      "content": "Sometimes success comes from random timing meeting cultural moments.",
+      "card": "Fifty Shades Success"
+    },
+    {
+      "id": 398,
+      "content": "What happens when data is too perfect?",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 399,
+      "content": "Sometimes the absence of randomness is more revealing than its presence.",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 400,
+      "content": "When researchers analyse trading data and find patterns too regular, it often indicates market manipulation.",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 401,
+      "content": "Humans trying to fake randomness typically make fraud detectable by avoiding patterns that seem 'too coincidental' but are expected in truly random sequences.",
+      "card": "Data Too Perfect"
+    },
+    {
+      "id": 402,
+      "content": "What if entire civilisations left no trace?",
+      "card": "Archaeological Bias"
+    },
+    {
+      "id": 403,
+      "content": "Human history reflects what randomly survived rather than what was actually important.",
+      "card": "Archaeological Bias"
+    },
+    {
+      "id": 404,
+      "content": "Egypt's dry climate preserved papyrus scrolls that would have vanished in wetter regions.",
+      "card": "Archaeological Bias"
+    },
+    {
+      "id": 405,
+      "content": "Archaeological preservation depends on random environmental factors rather than historical significance.",
+      "card": "Archaeological Bias"
+    },
+    {
+      "id": 406,
+      "content": "Can chance create beauty?",
+      "card": "Accidental Beauty"
+    },
+    {
+      "id": 407,
+      "content": "When chance produces combinations that strike us as elegant or meaningful, we experience aesthetic pleasure in discovering order in apparent chaos.",
+      "card": "Accidental Beauty"
+    },
+    {
+      "id": 408,
+      "content": "A sunset isn't trying to be beautiful, but we find it beautiful nonetheless.",
+      "card": "Accidental Beauty"
+    },
+    {
+      "id": 409,
+      "content": "One valid creative strategy: generate many random combinations, then apply aesthetic judgment to select the most compelling ones.",
+      "card": "Accidental Beauty"
+    },
+    {
+      "id": 410,
+      "content": "Why do we ignore distant threats?",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 411,
+      "content": "Our brains evolved to prioritise immediate survival over abstract future planning.",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 412,
+      "content": "Long-term risks involve low-probability but high-impact events, which our brains are terrible at evaluating.",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 413,
+      "content": "Survival used to be about reacting fast; now it's just as much about planning well.",
+      "card": "Presentism Bias"
+    },
+    {
+      "id": 414,
+      "content": "How can random factors combine to create a unique opportunity?",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 415,
+      "content": "New York's High Line was scheduled for demolition in 1980 - random citizen activism sparked a preservation campaign.",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 416,
+      "content": "The transformation required multiple random elements to align: persistent citizens, willing architects, supportive politicians, and viable economic conditions.",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 417,
+      "content": "What began as one city's response to a random preservation opportunity evolved into a global movement.",
+      "card": "High Line NYC"
+    },
+    {
+      "id": 418,
+      "content": "How do you plan for disasters when you can't predict the future?",
+      "card": "Monte Carlo Public Safety"
+    },
+    {
+      "id": 419,
+      "content": "During COVID-19, epidemiologists used Monte Carlo methods to model disease spread under different policy scenarios.",
+      "card": "Monte Carlo Public Safety"
+    },
+    {
+      "id": 420,
+      "content": "Instead of single predictions, simulations generated ranges of possible outcomes based on transmission rates, compliance, and variants.",
+      "card": "Monte Carlo Public Safety"
+    },
+    {
+      "id": 421,
+      "content": "The power lies in making uncertainty explicit and quantifiable.",
+      "card": "Monte Carlo Public Safety"
+    },
+    {
+      "id": 422,
+      "content": "Are you reading the best novels or the luckiest authors?",
+      "card": "Harry Potter Luck"
+    },
+    {
+      "id": 423,
+      "content": "Harry Potter was rejected by twelve publishers before Bloomsbury accepted it - an editor's eight-year-old daughter demanded to see the rest.",
+      "card": "Harry Potter Luck"
+    },
+    {
+      "id": 424,
+      "content": "Editors and literary agents possess extensive experience, yet success rates at identifying bestsellers remain barely above random chance.",
+      "card": "Harry Potter Luck"
+    },
+    {
+      "id": 425,
+      "content": "Many classics achieved their status through random historical accidents - being taught by influential professors or simply remaining in print.",
+      "card": "Harry Potter Luck"
+    },
+    {
+      "id": 426,
+      "content": "How do you hunt for accidents on purpose?",
+      "card": "Serendipity vs Algorithm"
+    },
+    {
+      "id": 427,
+      "content": "Artists collect random objects, maintain idea notebooks, and deliberately expose themselves to unfamiliar experiences.",
+      "card": "Serendipity vs Algorithm"
+    },
+    {
+      "id": 428,
+      "content": "The key is maintaining alertness - simultaneously focused on work whilst remaining open to interruption.",
+      "card": "Serendipity vs Algorithm"
+    },
+    {
+      "id": 429,
+      "content": "Modern technology makes this easier in some ways and harder in others - algorithms show us what we already like rather than what might surprise us.",
+      "card": "Serendipity vs Algorithm"
+    },
+    {
+      "id": 430,
+      "content": "How might a fruit machine create new business ideas?",
+      "card": "Creativator"
+    },
+    {
+      "id": 431,
+      "content": "Simon White built dodecagon wheels with marbles that clacked satisfyingly as they spun to a stop.",
+      "card": "Creativator"
+    },
+    {
+      "id": 432,
+      "content": "The workshop generated 30 refined ideas in a day by spinning wheels of scenarios, business models, and priorities.",
+      "card": "Creativator"
+    },
+    {
+      "id": 433,
+      "content": "Randomness needs physical presence to feel legitimate: watching wheels spin transforms chance into a proper process.",
+      "card": "Creativator"
+    },
+    {
+      "id": 434,
+      "content": "Can bad genes win by luck?",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 435,
+      "content": "In small populations, random genetic drift often overpowers selective pressure entirely.",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 436,
+      "content": "A bird with superior flying ability might die in a random storm before reproducing, whilst a less capable individual produces more offspring.",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 437,
+      "content": "In small populations, randomness dominates - chance events have outsized impacts when dealing with limited gene pools.",
+      "card": "Genetic Drift"
+    },
+    {
+      "id": 438,
+      "content": "How likely is it to save the best until last?",
+      "card": "Rolling Stone 500"
+    },
+    {
+      "id": 439,
+      "content": "Built an app to listen to Rolling Stone's 500 Greatest Albums in random order to avoid predictability and diminishing returns.",
+      "card": "Rolling Stone 500"
+    },
+    {
+      "id": 440,
+      "content": "Can't expect to like everything - discovered new gems whilst confirming personal dislikes.",
+      "card": "Rolling Stone 500"
+    },
+    {
+      "id": 441,
+      "content": "Beautiful serendipity: Marvin Gaye's 'What's Going On' (number 1) was the very last album served up - a 1 in 500 moment of magic.",
+      "card": "Rolling Stone 500"
+    },
+    {
+      "id": 442,
+      "content": "How can you know the directions but not know where you're going?",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 443,
+      "content": "Marcus John Henry Brown recorded a walk as turn-by-turn instructions that can be done anywhere - you put your trust in the artist.",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 444,
+      "content": "Starting at Charing Cross with a coin toss, the walk led through London's streets, revealing familiar places anew.",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 445,
+      "content": "Beautiful coincidence: the 90th turn ended at Euston Tap, exactly where Chris needed to catch his train home.",
+      "card": "90 Waypoint Walk"
+    },
+    {
+      "id": 446,
+      "content": "What do you see in the coffee foam?",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 447,
+      "content": "Created @CoffeeRorschach account posting coffee cup tops to see what others would see - near uniform consensus some days, vast variations others.",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 448,
+      "content": "Some smart alec would say 'A coffee cup' - the same response as AI image recognition software like Google Lens.",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 449,
+      "content": "A variation of the Turing Test: people willing to fail it, to be no better than machines, to lack imagination from apophenia.",
+      "card": "Coffee Rorschach"
+    },
+    {
+      "id": 450,
+      "content": "Can randomness be manipulated like a paintbrush?",
+      "card": "Randomness as Tool"
+    },
+    {
+      "id": 451,
+      "content": "John Cage and Gerhard Richter use randomness within larger creative frameworks - Cage might use I Ching, but aesthetic judgment guides realisation.",
+      "card": "Randomness as Tool"
+    },
+    {
+      "id": 452,
+      "content": "Randomness bypasses habitual preferences, breaks creative paralysis, and reveals hidden patterns in your aesthetic.",
+      "card": "Randomness as Tool"
+    },
+    {
+      "id": 453,
+      "content": "Contemporary digital art expanded these possibilities with algorithms generating complex visual patterns artists can selectively develop.",
+      "card": "Randomness as Tool"
+    },
+    {
+      "id": 454,
+      "content": "Why does inconsistent parenting harm children?",
+      "card": "Parenting Consistency"
+    },
+    {
+      "id": 455,
+      "content": "If your decisions and punishments seem random, children will assume the worst and prepare for that outcome in every situation.",
+      "card": "Parenting Consistency"
+    },
+    {
+      "id": 456,
+      "content": "Random-seeming rules can lead to behavioural problems or mental health issues as children deal with stress trying to work out which rules apply.",
+      "card": "Parenting Consistency"
+    },
+    {
+      "id": 457,
+      "content": "The use of randomness should be intentional - appearing random when affected by factors they can't discern leads to miscommunication.",
+      "card": "Parenting Consistency"
+    },
+    {
+      "id": 458,
+      "content": "Where should you look to find love?",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 459,
+      "content": "Most people marry someone who lived within a few miles during formative years - statistical inevitability, not romantic destiny.",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 460,
+      "content": "Geographic proximity during adolescence predicts relationship formation more powerfully than personality compatibility or shared interests.",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 461,
+      "content": "People seem to develop deep compatibility with whoever happens to be available during crucial periods - roughly ages 16-26.",
+      "card": "Propinquity Effect"
+    },
+    {
+      "id": 462,
+      "content": "Why do teenage years shape who you become?",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 463,
+      "content": "Between ages 10-30, experiences encode more vividly into long-term memory than events from other life periods.",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 464,
+      "content": "The books in school curricula, popular music, and social movements during adolescence disproportionately shape generational characteristics.",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 465,
+      "content": "A significant portion of adult identity depends on accidental timing rather than deliberate self-construction.",
+      "card": "Reminiscence Bump"
+    },
+    {
+      "id": 466,
+      "content": "Can you learn to be luckier?",
+      "card": "Wiseman Lucky Principles"
+    },
+    {
+      "id": 467,
+      "content": "Psychologist Richard Wiseman's principles: maximise chance opportunities, listen to lucky hunches, expect good fortune, turn bad luck into good.",
+      "card": "Wiseman Lucky Principles"
+    },
+    {
+      "id": 468,
+      "content": "Lucky people see potential connections where others don't, maintain broad networks, and remain open to new experiences.",
+      "card": "Wiseman Lucky Principles"
+    },
+    {
+      "id": 469,
+      "content": "Lucky people tend to see the advantage in situations, how things could have been worse, and how they might turn beneficial.",
+      "card": "Wiseman Lucky Principles"
+    },
+    {
+      "id": 470,
+      "content": "Could your trip to the shops trigger a global crisis?",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 471,
+      "content": "One person's random decision to visit a market or take a particular flight can alter global history.",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 472,
+      "content": "1918 influenza may have begun with a single sick soldier; HIV likely jumped to humans through random contact with infected primates.",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 473,
+      "content": "COVID-19 spread globally because early cases occurred in highly connected transportation hubs rather than isolated communities.",
+      "card": "Pandemic Origins"
+    },
+    {
+      "id": 474,
+      "content": "Why do pandas exist?",
+      "card": "Panda Paradox"
+    },
+    {
+      "id": 475,
+      "content": "Giant pandas are evolutionary disasters: carnivorous digestive systems eating bamboo, inefficient reproduction, premature fragile cubs.",
+      "card": "Panda Paradox"
+    },
+    {
+      "id": 476,
+      "content": "Geographic isolation in Chinese mountains protected them from extinction events; climate changes inadvertently preserved bamboo forests.",
+      "card": "Panda Paradox"
+    },
+    {
+      "id": 477,
+      "content": "Their survival reflects fortunate geography and timing rather than evolutionary optimisation - sometimes species survive because they were lucky.",
+      "card": "Panda Paradox"
+    },
+    {
+      "id": 478,
+      "content": "Where does skill end and circumstance begin?",
+      "card": "Olympic Margins"
+    },
+    {
+      "id": 479,
+      "content": "Adam Peaty lost by 0.02 seconds at 2024 Olympics - about the length of a fingernail. The next day, he tested positive for COVID.",
+      "card": "Olympic Margins"
+    },
+    {
+      "id": 480,
+      "content": "Water temperature variations across lanes, tiny differences in starting blocks, timing of illness relative to training cycle.",
+      "card": "Olympic Margins"
+    },
+    {
+      "id": 481,
+      "content": "In swimming timed to thousandths of seconds, random biological and environmental variations often exceed performance gaps between athletes.",
+      "card": "Olympic Margins"
+    }
+  ]
+}
