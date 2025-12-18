@@ -139,21 +139,11 @@ def compose():
     schedule = generate_daily_schedule()
     current_item = schedule[minute]
     
-    # Format content for e-ink display
-    # Poem/1 handles text wrapping automatically
-    content_text = current_item['content']
-    
-    # Only truncate if extremely long (let device handle normal wrapping)
-    max_display_length = 160  # ~4-5 lines worth
-    if len(content_text) > max_display_length:
-        # Truncate at last complete word before limit
-        truncated = content_text[:max_display_length].rsplit(' ', 1)[0]
-        if not truncated.endswith(('.', '!', '?')):
-            truncated += '...'
-        content_text = truncated
+    # Replace en-dashes in content with regular hyphens (e-ink wrapping issue)
+    content = current_item['content'].replace('–', '-')
     
     # Format as poem with time prepended
-    poem = f"{time24} — {content_text}"
+    poem = f"{time24} — {content}"
     
     # Generate poem ID
     poem_id = generate_poem_id(time24, poem)
