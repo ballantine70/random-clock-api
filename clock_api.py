@@ -139,34 +139,18 @@ def compose():
     schedule = generate_daily_schedule()
     current_item = schedule[minute]
     
-    # Format content with line breaks for e-ink display
-    # Poem/1 uses "/" as line separator
+    # Format content for e-ink display
+    # Poem/1 handles text wrapping automatically
     content_text = current_item['content']
     
-    # Add line breaks at natural points if content is long
-    # Aim for ~40 characters per line for readability
-    if len(content_text) > 45:
-        # Try to break at sentence boundaries or commas
-        formatted_lines = []
-        words = content_text.split()
-        current_line = ""
-        
-        for word in words:
-            test_line = current_line + (" " if current_line else "") + word
-            
-            # Break at natural points: after sentences or if line gets too long
-            if len(test_line) > 45 or (len(test_line) > 30 and word.endswith(('.', '?', '!', ',', ';', ':'))):
-                if current_line:
-                    formatted_lines.append(current_line.strip())
-                current_line = word
-            else:
-                current_line = test_line
-        
-        if current_line:
-            formatted_lines.append(current_line.strip())
-        
-        # Join with " / " for Poem/1 line breaks
-        content_text = " / ".join(formatted_lines)
+    # Only truncate if extremely long (let device handle normal wrapping)
+    max_display_length = 160  # ~4-5 lines worth
+    if len(content_text) > max_display_length:
+        # Truncate at last complete word before limit
+        truncated = content_text[:max_display_length].rsplit(' ', 1)[0]
+        if not truncated.endswith(('.', '!', '?')):
+            truncated += '...'
+        content_text = truncated
     
     # Format as poem with time prepended
     poem = f"{time24} — {content_text}"
