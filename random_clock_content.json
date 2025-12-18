@@ -4,7 +4,7 @@
     "items_per_card": 4,
     "total_cards": 120,
     "repetitions_per_day": 3,
-    "description": "Content for Random the Book poem/1 style clock - 1440 minutes with each item appearing 3 times",
+    "description": "Content for Random the Book poem/1 style clock; 1440 minutes with each item appearing 3 times",
     "cards_completed": 120
   },
   "items": [
@@ -165,7 +165,7 @@
     },
     {
       "id": 32,
-      "content": "Randomness comes with context - it falls into the messy terrain of human circumstances and fears.",
+      "content": "Randomness comes with context; it falls into the messy terrain of human circumstances and fears.",
       "card": "Bernoulli"
     },
     {
@@ -285,7 +285,7 @@
     },
     {
       "id": 56,
-      "content": "We don't want actual randomness - we want the feeling of randomness without the clumps.",
+      "content": "We don't want actual randomness; we want the feeling of randomness without the clumps.",
       "card": "Spotify Shuffle"
     },
     {
@@ -425,7 +425,7 @@
     },
     {
       "id": 84,
-      "content": "AI image recognition just saw 'a coffee cup' - humans willing to fail the Turing Test for a cheap laugh.",
+      "content": "AI image recognition just saw 'a coffee cup'; humans willing to fail the Turing Test for a cheap laugh.",
       "card": "Coffee Rorschach"
     },
     {
@@ -505,7 +505,7 @@
     },
     {
       "id": 100,
-      "content": "Randomness was no longer divine will - it became something you could measure and understand.",
+      "content": "Randomness was no longer divine will; it became something you could measure and understand.",
       "card": "Cardano Sample Space"
     },
     {
@@ -580,7 +580,7 @@
     },
     {
       "id": 115,
-      "content": "A 256-bit encryption key has 2^256 possible values - exceeding the estimated particles in the observable universe.",
+      "content": "A 256-bit encryption key has 2^256 possible values; exceeding the estimated particles in the observable universe.",
       "card": "Encryption Keys"
     },
     {
@@ -645,7 +645,7 @@
     },
     {
       "id": 128,
-      "content": "The walk took Matt through Covent Garden, the Freemasons' Museum, Holborn, and King's Cross - places both familiar and new.",
+      "content": "The walk took Matt through Covent Garden, the Freemasons' Museum, Holborn, and King's Cross; places both familiar and new.",
       "card": "90 Waypoint Walk"
     },
     {
@@ -725,7 +725,7 @@
     },
     {
       "id": 144,
-      "content": "This creates plausible deniability - anyone answering 'yes' might be telling truth or might have flipped heads.",
+      "content": "This creates plausible deniability; anyone answering 'yes' might be telling truth or might have flipped heads.",
       "card": "Randomised Response"
     },
     {
@@ -1010,7 +1010,7 @@
     },
     {
       "id": 201,
-      "content": "Throughout either approach, there's no sense of surprise - number 499 follows 500 or vice versa.",
+      "content": "Throughout either approach, there's no sense of surprise; number 499 follows 500 or vice versa.",
       "card": "Rolling Stone 500 Albums"
     },
     {
@@ -1020,7 +1020,7 @@
     },
     {
       "id": 203,
-      "content": "Past success predicts future performance - but only in domains with low randomness.",
+      "content": "Past success predicts future performance; but only in domains with low randomness.",
       "card": "Track Record Validity"
     },
     {
@@ -1170,7 +1170,7 @@
     },
     {
       "id": 233,
-      "content": "True innovation requires making connections that weren't obvious before - if you could have planned it, someone probably already has.",
+      "content": "True innovation requires making connections that weren't obvious before; if you could have planned it, someone probably already has.",
       "card": "Post-it VELCRO"
     },
     {
@@ -1230,7 +1230,7 @@
     },
     {
       "id": 245,
-      "content": "By exchanging tiles, he improved his odds to 50/50 - unfortunately drew the worst letters and lost anyway.",
+      "content": "By exchanging tiles, he improved his odds to 50/50; unfortunately drew the worst letters and lost anyway.",
       "card": "Scrabble Strategy"
     },
     {
@@ -1270,7 +1270,7 @@
     },
     {
       "id": 253,
-      "content": "The starting word must be truly random - if you choose it yourself, your existing biases will influence the selection.",
+      "content": "The starting word must be truly random; if you choose it yourself, your existing biases will influence the selection.",
       "card": "De Bono Random Word"
     },
     {
@@ -1330,7 +1330,7 @@
     },
     {
       "id": 265,
-      "content": "Creative tension comes from balancing preparation with spontaneity - the audience can sense this dynamic energy.",
+      "content": "Creative tension comes from balancing preparation with spontaneity; the audience can sense this dynamic energy.",
       "card": "Jazz Improvisation"
     },
     {
@@ -1350,7 +1350,7 @@
     },
     {
       "id": 269,
-      "content": "Serendipity isn't purely random - it's the intersection of preparation and opportunity.",
+      "content": "Serendipity isn't purely random; it's the intersection of preparation and opportunity.",
       "card": "Cut-up Technique"
     },
     {
@@ -1390,7 +1390,7 @@
     },
     {
       "id": 277,
-      "content": "The key is maintaining alertness - simultaneously focused on work while remaining open to interruption and redirection.",
+      "content": "The key is maintaining alertness; simultaneously focused on work while remaining open to interruption and redirection.",
       "card": "Artist Serendipity"
     },
     {
@@ -1400,7 +1400,7 @@
     },
     {
       "id": 279,
-      "content": "Give yourself exactly 15 minutes to solve a problem - the pressure prevents falling back on usual deliberative processes.",
+      "content": "Give yourself exactly 15 minutes to solve a problem; the pressure prevents falling back on usual deliberative processes.",
       "card": "Creative Constraints"
     },
     {
@@ -1500,7 +1500,7 @@
     },
     {
       "id": 299,
-      "content": "A shuffled deck has 8 followed by 67 zeros possible arrangements - more than atoms on Earth.",
+      "content": "A shuffled deck has 8 followed by 67 zeros possible arrangements; more than atoms on Earth.",
       "card": "52 Factorial"
     },
     {
@@ -1530,7 +1530,7 @@
     },
     {
       "id": 305,
-      "content": "Your career is a sample size of one - mathematically insufficient for distinguishing skill from fortunate timing.",
+      "content": "Your career is a sample size of one; mathematically insufficient for distinguishing skill from fortunate timing.",
       "card": "Career Sample Size"
     },
     {
@@ -1550,7 +1550,7 @@
     },
     {
       "id": 309,
-      "content": "Casinos don't fight randomness - they harness it, turning unpredictable moments into steady revenue.",
+      "content": "Casinos don't fight randomness; they harness it, turning unpredictable moments into steady revenue.",
       "card": "Law of Large Numbers"
     },
     {
@@ -1565,7 +1565,7 @@
     },
     {
       "id": 312,
-      "content": "Most operations bin immediately - cost of testing isn't worth marginal uncertainty reduction when the cost of being wrong is catastrophic.",
+      "content": "Most operations bin immediately; cost of testing isn't worth marginal uncertainty reduction when the cost of being wrong is catastrophic.",
       "card": "When Enough Data"
     },
     {
@@ -1625,7 +1625,7 @@
     },
     {
       "id": 324,
-      "content": "The book frames itself as written using the same random method - 'the wisdom of the dice' determining the story structure.",
+      "content": "The book frames itself as written using the same random method; 'the wisdom of the dice' determining the story structure.",
       "card": "The Dice Man"
     },
     {
@@ -1650,7 +1650,7 @@
     },
     {
       "id": 329,
-      "content": "Over half of 2024-2025 NFL games were decided by seven points or less - one possession, one random bounce.",
+      "content": "Over half of 2024-2025 NFL games were decided by seven points or less; one possession, one random bounce.",
       "card": "American Football Shape"
     },
     {
@@ -1665,12 +1665,12 @@
     },
     {
       "id": 332,
-      "content": "In statistics, it means events with equal probability - which might be highly unlikely (lottery win) or very likely (rolling a one).",
+      "content": "In statistics, it means events with equal probability; which might be highly unlikely (lottery win) or very likely (rolling a one).",
       "card": "What Random Means"
     },
     {
       "id": 333,
-      "content": "The multiple meanings evolved to be quite contradictory - fittingly, a bit random.",
+      "content": "The multiple meanings evolved to be quite contradictory; fittingly, a bit random.",
       "card": "What Random Means"
     },
     {
@@ -1690,7 +1690,7 @@
     },
     {
       "id": 337,
-      "content": "Decades of research showed people consistently violate expected utility theory - revealing the gap between how we think people should decide and how they actually do.",
+      "content": "Decades of research showed people consistently violate expected utility theory; revealing the gap between how we think people should decide and how they actually do.",
       "card": "Ramsey Gambling"
     },
     {
@@ -1700,7 +1700,7 @@
     },
     {
       "id": 339,
-      "content": "Mike Shema proposed 'rolling for initiative' - using dice or cards to randomly determine speaking order.",
+      "content": "Mike Shema proposed 'rolling for initiative'; using dice or cards to randomly determine speaking order.",
       "card": "Rolling for Initiative"
     },
     {
@@ -1760,7 +1760,7 @@
     },
     {
       "id": 351,
-      "content": "In ancient Greece, randomness didn't exist as something calculable - only the will of the gods.",
+      "content": "In ancient Greece, randomness didn't exist as something calculable; only the will of the gods.",
       "card": "Greek Gods Randomness"
     },
     {
@@ -1840,7 +1840,7 @@
     },
     {
       "id": 367,
-      "content": "@stevexoh plans to exhibit paintings behind scratch card coating - visitors purchase pieces sight unseen.",
+      "content": "@stevexoh plans to exhibit paintings behind scratch card coating; visitors purchase pieces sight unseen.",
       "card": "Scratch Card Art"
     },
     {
@@ -1865,7 +1865,7 @@
     },
     {
       "id": 372,
-      "content": "Key feature of all: aspects of randomness - unpredictability of outcomes, non-linearity between effect and cause.",
+      "content": "Key feature of all: aspects of randomness; unpredictability of outcomes, non-linearity between effect and cause.",
       "card": "VUCA BANI RUPT"
     },
     {
@@ -1890,7 +1890,7 @@
     },
     {
       "id": 377,
-      "content": "The goal isn't chaos - it's breaking automatic patterns that prevent seeing new possibilities.",
+      "content": "The goal isn't chaos; it's breaking automatic patterns that prevent seeing new possibilities.",
       "card": "Breaking Cognitive Ruts"
     },
     {
@@ -1900,12 +1900,12 @@
     },
     {
       "id": 379,
-      "content": "Chess: pure skill, identical information, no random elements - better player always wins eventually.",
+      "content": "Chess: pure skill, identical information, no random elements; better player always wins eventually.",
       "card": "Chess vs Poker"
     },
     {
       "id": 380,
-      "content": "Poker: hidden information and random card distribution - best players lose individual hands regularly despite excellent decisions.",
+      "content": "Poker: hidden information and random card distribution; best players lose individual hands regularly despite excellent decisions.",
       "card": "Chess vs Poker"
     },
     {
@@ -1920,7 +1920,7 @@
     },
     {
       "id": 383,
-      "content": "Sometimes the best defence isn't a strong wall - it's uncertainty about where the wall is.",
+      "content": "Sometimes the best defence isn't a strong wall; it's uncertainty about where the wall is.",
       "card": "Unpredictable Security"
     },
     {
@@ -1980,7 +1980,7 @@
     },
     {
       "id": 395,
-      "content": "Fifty Shades of Grey benefited from controversy and unconventional style - publicity wasn't directed or sought.",
+      "content": "Fifty Shades of Grey benefited from controversy and unconventional style; publicity wasn't directed or sought.",
       "card": "Fifty Shades Success"
     },
     {
@@ -2080,7 +2080,7 @@
     },
     {
       "id": 415,
-      "content": "New York's High Line was scheduled for demolition in 1980 - random citizen activism sparked a preservation campaign.",
+      "content": "New York's High Line was scheduled for demolition in 1980; random citizen activism sparked a preservation campaign.",
       "card": "High Line NYC"
     },
     {
@@ -2120,7 +2120,7 @@
     },
     {
       "id": 423,
-      "content": "Harry Potter was rejected by twelve publishers before Bloomsbury accepted it - an editor's eight-year-old daughter demanded to see the rest.",
+      "content": "Harry Potter was rejected by twelve publishers before Bloomsbury accepted it; an editor's eight-year-old daughter demanded to see the rest.",
       "card": "Harry Potter Luck"
     },
     {
@@ -2130,7 +2130,7 @@
     },
     {
       "id": 425,
-      "content": "Many classics achieved their status through random historical accidents - being taught by influential professors or simply remaining in print.",
+      "content": "Many classics achieved their status through random historical accidents; being taught by influential professors or simply remaining in print.",
       "card": "Harry Potter Luck"
     },
     {
@@ -2145,12 +2145,12 @@
     },
     {
       "id": 428,
-      "content": "The key is maintaining alertness - simultaneously focused on work whilst remaining open to interruption.",
+      "content": "The key is maintaining alertness; simultaneously focused on work whilst remaining open to interruption.",
       "card": "Serendipity vs Algorithm"
     },
     {
       "id": 429,
-      "content": "Modern technology makes this easier in some ways and harder in others - algorithms show us what we already like rather than what might surprise us.",
+      "content": "Modern technology makes this easier in some ways and harder in others; algorithms show us what we already like rather than what might surprise us.",
       "card": "Serendipity vs Algorithm"
     },
     {
@@ -2190,7 +2190,7 @@
     },
     {
       "id": 437,
-      "content": "In small populations, randomness dominates - chance events have outsized impacts when dealing with limited gene pools.",
+      "content": "In small populations, randomness dominates; chance events have outsized impacts when dealing with limited gene pools.",
       "card": "Genetic Drift"
     },
     {
@@ -2205,12 +2205,12 @@
     },
     {
       "id": 440,
-      "content": "Can't expect to like everything - discovered new gems whilst confirming personal dislikes.",
+      "content": "Can't expect to like everything; discovered new gems whilst confirming personal dislikes.",
       "card": "Rolling Stone 500"
     },
     {
       "id": 441,
-      "content": "Beautiful serendipity: Marvin Gaye's 'What's Going On' (number 1) was the very last album served up - a 1 in 500 moment of magic.",
+      "content": "Beautiful serendipity: Marvin Gaye's 'What's Going On' (number 1) was the very last album served up; a 1 in 500 moment of magic.",
       "card": "Rolling Stone 500"
     },
     {
@@ -2220,7 +2220,7 @@
     },
     {
       "id": 443,
-      "content": "Marcus John Henry Brown recorded a walk as turn-by-turn instructions that can be done anywhere - you put your trust in the artist.",
+      "content": "Marcus John Henry Brown recorded a walk as turn-by-turn instructions that can be done anywhere; you put your trust in the artist.",
       "card": "90 Waypoint Walk"
     },
     {
@@ -2240,12 +2240,12 @@
     },
     {
       "id": 447,
-      "content": "Created @CoffeeRorschach account posting coffee cup tops to see what others would see - near uniform consensus some days, vast variations others.",
+      "content": "Created @CoffeeRorschach account posting coffee cup tops to see what others would see; near uniform consensus some days, vast variations others.",
       "card": "Coffee Rorschach"
     },
     {
       "id": 448,
-      "content": "Some smart alec would say 'A coffee cup' - the same response as AI image recognition software like Google Lens.",
+      "content": "Some smart alec would say 'A coffee cup'; the same response as AI image recognition software like Google Lens.",
       "card": "Coffee Rorschach"
     },
     {
@@ -2260,7 +2260,7 @@
     },
     {
       "id": 451,
-      "content": "John Cage and Gerhard Richter use randomness within larger creative frameworks - Cage might use I Ching, but aesthetic judgment guides realisation.",
+      "content": "John Cage and Gerhard Richter use randomness within larger creative frameworks; Cage might use I Ching, but aesthetic judgment guides realisation.",
       "card": "Randomness as Tool"
     },
     {
@@ -2290,7 +2290,7 @@
     },
     {
       "id": 457,
-      "content": "The use of randomness should be intentional - appearing random when affected by factors they can't discern leads to miscommunication.",
+      "content": "The use of randomness should be intentional; appearing random when affected by factors they can't discern leads to miscommunication.",
       "card": "Parenting Consistency"
     },
     {
@@ -2300,7 +2300,7 @@
     },
     {
       "id": 459,
-      "content": "Most people marry someone who lived within a few miles during formative years - statistical inevitability, not romantic destiny.",
+      "content": "Most people marry someone who lived within a few miles during formative years; statistical inevitability, not romantic destiny.",
       "card": "Propinquity Effect"
     },
     {
@@ -2310,7 +2310,7 @@
     },
     {
       "id": 461,
-      "content": "People seem to develop deep compatibility with whoever happens to be available during crucial periods - roughly ages 16-26.",
+      "content": "People seem to develop deep compatibility with whoever happens to be available during crucial periods; roughly ages 16-26.",
       "card": "Propinquity Effect"
     },
     {
@@ -2390,7 +2390,7 @@
     },
     {
       "id": 477,
-      "content": "Their survival reflects fortunate geography and timing rather than evolutionary optimisation - sometimes species survive because they were lucky.",
+      "content": "Their survival reflects fortunate geography and timing rather than evolutionary optimisation; sometimes species survive because they were lucky.",
       "card": "Panda Paradox"
     },
     {
@@ -2400,7 +2400,7 @@
     },
     {
       "id": 479,
-      "content": "Adam Peaty lost by 0.02 seconds at 2024 Olympics - about the length of a fingernail. The next day, he tested positive for COVID.",
+      "content": "Adam Peaty lost by 0.02 seconds at 2024 Olympics; about the length of a fingernail. The next day, he tested positive for COVID.",
       "card": "Olympic Margins"
     },
     {
