@@ -139,8 +139,37 @@ def compose():
     schedule = generate_daily_schedule()
     current_item = schedule[minute]
     
+    # Format content with line breaks for e-ink display
+    # Poem/1 uses "/" as line separator
+    content_text = current_item['content']
+    
+    # Add line breaks at natural points if content is long
+    # Aim for ~40 characters per line for readability
+    if len(content_text) > 45:
+        # Try to break at sentence boundaries or commas
+        formatted_lines = []
+        words = content_text.split()
+        current_line = ""
+        
+        for word in words:
+            test_line = current_line + (" " if current_line else "") + word
+            
+            # Break at natural points: after sentences or if line gets too long
+            if len(test_line) > 45 or (len(test_line) > 30 and word.endswith(('.', '?', '!', ',', ';', ':'))):
+                if current_line:
+                    formatted_lines.append(current_line.strip())
+                current_line = word
+            else:
+                current_line = test_line
+        
+        if current_line:
+            formatted_lines.append(current_line.strip())
+        
+        # Join with " / " for Poem/1 line breaks
+        content_text = " / ".join(formatted_lines)
+    
     # Format as poem with time prepended
-    poem = f"{time24} — {current_item['content']}"
+    poem = f"{time24} — {content_text}"
     
     # Generate poem ID
     poem_id = generate_poem_id(time24, poem)
