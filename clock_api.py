@@ -28,7 +28,7 @@ REQUIRE_AUTH = False  # Set to True to require authorization header
 # National Rail departures via Realtime Trains API (RTT)
 # Register at realtimetrains.co.uk — set RTT_TOKEN to the Bearer token from your token details page
 RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
-RTT_URL = 'https://data.rtt.io/v1/station/HMW/departures'
+RTT_URL = 'https://data.rtt.io/rtt/location'
 
 # Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
 COMMUTE_WINDOWS = [
@@ -102,44 +102,63 @@ def get_train_departures(count=4):
         resp = http_requests.get(
             RTT_URL,
             headers={'Authorization': f'Bearer {RTT_TOKEN}'},
+            params={'code': 'gb-nr:HMW', 'timeWindow': 120},
             timeout=8,
         )
         resp.raise_for_status()
-        services = resp.json().get('services') or []
+        all_services = resp.json().get('services') or []
     except http_requests.exceptions.RequestException as exc:
         return [], str(exc)
 
+    def parse_iso_time(iso_str):
+        """Parse ISO 8601 datetime string → UK local HH:MM, or None on failure."""
+        if not iso_str:
+            return None
+        try:
+            dt = datetime.fromisoformat(iso_str.replace('Z', '+00:00'))
+            if UK_TZ:
+                dt = dt.astimezone(UK_TZ)
+            return dt.strftime('%H:%M')
+        except (ValueError, AttributeError):
+            return None
+
     trains = []
-    for svc in services[:count]:
-        detail = svc.get('locationDetail', {})
+    for svc in all_services:
+        if len(trains) >= count:
+            break
 
-        # Times come as 'HHMM' — reformat to 'HH:MM'
-        def fmt(t):
-            return f'{t[:2]}:{t[2:]}' if t and len(t) == 4 else t or '?'
+        temporal = svc.get('temporalData') or {}
+        departure = temporal.get('departure')
+        if not departure:
+            continue  # pass-through, not a stopping departure
 
-        scheduled = fmt(detail.get('gbttBookedDeparture', ''))
-        realtime  = fmt(detail.get('realtimeDeparture', ''))
-        cancelled = detail.get('cancelReasonCode') or svc.get('isCancelled')
+        cancelled = departure.get('isCancelled', False)
+        scheduled = parse_iso_time(departure.get('scheduleAdvertised'))
+        estimated = parse_iso_time(departure.get('realtimeEstimate'))
 
         if cancelled:
             display_time = 'CANC'
-        elif realtime and realtime != scheduled:
-            display_time = realtime   # running late — show revised time
+        elif estimated and estimated != scheduled:
+            display_time = estimated  # running late — show revised time
         else:
-            display_time = scheduled  # on time
+            display_time = scheduled or '?'
 
         destinations = svc.get('destination') or []
-        destination = destinations[0].get('description', 'Unknown') if destinations else 'Unknown'
+        destination = destinations[0].get('location', {}).get('description', 'Unknown') if destinations else 'Unknown'
 
-        platform = detail.get('platform')
+        loc_meta = svc.get('locationMetadata') or {}
+        plat = loc_meta.get('platform') or {}
+        platform = plat.get('actual') or plat.get('planned')
         platform_display = f'Plat {platform}' if platform else 'Plat ?'
+
+        status = 'Cancelled' if cancelled else ('On time' if display_time == scheduled else f'Exp {estimated}')
 
         trains.append({
             'time': display_time,
             'destination': destination,
             'platform': platform_display,
             'scheduled': scheduled,
-            'status': 'Cancelled' if cancelled else ('On time' if display_time == scheduled else f'Exp {realtime}'),
+            'status': status,
         })
 
     return trains, None
