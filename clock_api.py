@@ -7,7 +7,7 @@ Compatible with poem.town Device API spec
 
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import hashlib
 import os
@@ -26,9 +26,37 @@ API_KEY = "poem.randombook"  # Change this to your own key
 REQUIRE_AUTH = False  # Set to True to require authorization header
 
 # National Rail departures via Realtime Trains API (RTT)
-# Register at realtimetrains.co.uk — set RTT_TOKEN to the Bearer token from your token details page
+# RTT_TOKEN is the long-lived token from api-portal.rtt.io — used to obtain short-lived access tokens
 RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
+RTT_TOKEN_URL = 'https://data.rtt.io/api/get_access_token'
 RTT_URL = 'https://data.rtt.io/rtt/location'
+
+# In-memory access token cache
+_rtt_access_token = None
+_rtt_access_token_expiry = None
+
+def get_rtt_access_token():
+    """Exchange the long-lived RTT token for a short-lived access token (cached)."""
+    global _rtt_access_token, _rtt_access_token_expiry
+    now = datetime.now()
+    if _rtt_access_token and _rtt_access_token_expiry and now < _rtt_access_token_expiry:
+        return _rtt_access_token, None
+    try:
+        resp = http_requests.post(
+            RTT_TOKEN_URL,
+            headers={'Authorization': f'Bearer {RTT_TOKEN}'},
+            timeout=8,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        token = data.get('token') or data.get('access_token') or data.get('accessToken')
+        if not token:
+            return None, f'Unexpected token response: {data}'
+        _rtt_access_token = token
+        _rtt_access_token_expiry = now + timedelta(minutes=50)
+        return token, None
+    except http_requests.exceptions.RequestException as exc:
+        return None, str(exc)
 
 # Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
 COMMUTE_WINDOWS = [
@@ -98,10 +126,14 @@ def get_train_departures(count=4):
     if not RTT_TOKEN:
         return [], 'RTT_TOKEN environment variable is not set'
 
+    access_token, err = get_rtt_access_token()
+    if not access_token:
+        return [], f'Failed to obtain RTT access token: {err}'
+
     try:
         resp = http_requests.get(
             RTT_URL,
-            headers={'Authorization': f'Bearer {RTT_TOKEN}'},
+            headers={'Authorization': f'Bearer {access_token}'},
             params={'code': 'gb-nr:HMW', 'timeWindow': 120},
             timeout=8,
         )
