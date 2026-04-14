@@ -25,13 +25,9 @@ CORS(app)  # Enable CORS for browser access
 API_KEY = "poem.randombook"  # Change this to your own key
 REQUIRE_AUTH = False  # Set to True to require authorization header
 
-# TfL API Configuration
-TFL_API_KEY = os.environ.get('TFL_API_KEY', '')
-TFL_ARRIVALS_URL = 'https://api.tfl.gov.uk/StopPoint/910GHAMWICK/Arrivals'
-
-def tfl_params():
-    """Build TfL query params, injecting app_key if configured."""
-    return {'app_key': TFL_API_KEY} if TFL_API_KEY else {}
+# National Rail departures via Huxley2 (Darwin REST wrapper)
+# Hampton Wick CRS code: HMW
+HUXLEY2_URL = 'https://huxley2.azurewebsites.net/departures/HMW/{count}'
 
 # Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
 COMMUTE_WINDOWS = [
@@ -95,56 +91,43 @@ def get_current_minute():
     return now.hour * 60 + now.minute
 
 def get_train_departures(count=4):
-    """Fetch upcoming departures from Hampton Wick via TfL Unified API.
+    """Fetch upcoming departures from Hampton Wick via Huxley2 (National Rail Darwin).
     Returns (list_of_trains, error_string_or_None).
     """
     try:
         resp = http_requests.get(
-            TFL_ARRIVALS_URL,
-            params=tfl_params(),
+            HUXLEY2_URL.format(count=count),
             timeout=8,
         )
         resp.raise_for_status()
-        arrivals = resp.json()
+        services = resp.json().get('trainServices') or []
     except http_requests.exceptions.RequestException as exc:
         return [], str(exc)
 
-    # Sort ascending by seconds until arrival
-    arrivals.sort(key=lambda x: x.get('timeToStation', 999999))
-
     trains = []
-    for arrival in arrivals[:count]:
-        # Departure time — convert UTC ISO string to UK local time
-        expected_str = arrival.get('expectedArrival', '')
-        try:
-            expected_dt = datetime.fromisoformat(expected_str.replace('Z', '+00:00'))
-            if UK_TZ:
-                expected_dt = expected_dt.astimezone(UK_TZ)
-            departure_time = expected_dt.strftime('%H:%M')
-        except (ValueError, AttributeError):
-            mins = arrival.get('timeToStation', 0) // 60
-            departure_time = f'+{mins}m'
+    for svc in services:
+        std = svc.get('std', '')   # scheduled departure HH:MM
+        etd = svc.get('etd', '')   # estimated: HH:MM | "On time" | "Delayed" | "Cancelled"
 
-        # Destination — strip common suffixes
-        destination = arrival.get('destinationName', 'Unknown')
-        for suffix in (' Rail Station', ' Station', ' Underground Station'):
-            destination = destination.replace(suffix, '')
-        destination = destination.strip()
-
-        # Platform
-        platform_raw = arrival.get('platformName', '')
-        if platform_raw:
-            platform = (platform_raw
-                        .replace('Platform ', 'Plat ')
-                        .replace('platform ', 'Plat '))
+        if etd == 'Cancelled':
+            display_time = 'CANC'
+        elif etd and etd != 'On time' and ':' in etd:
+            display_time = etd     # running late — show revised time
         else:
-            platform = 'Plat ?'
+            display_time = std     # on time — show scheduled time
+
+        destinations = svc.get('destination') or []
+        destination = destinations[0].get('locationName', 'Unknown') if destinations else 'Unknown'
+
+        platform = svc.get('platform')
+        platform_display = f'Plat {platform}' if platform else 'Plat ?'
 
         trains.append({
-            'time': departure_time,
+            'time': display_time,
             'destination': destination,
-            'platform': platform,
-            'minutes': arrival.get('timeToStation', 0) // 60,
+            'platform': platform_display,
+            'scheduled': std,
+            'status': etd,
         })
 
     return trains, None
@@ -531,7 +514,7 @@ def index():
 
         <div class="endpoint">
             <strong>POST /api/v1/trains/compose</strong><br>
-            Always returns next 4 departures from Hampton Wick (via TfL API).
+            Always returns next 4 departures from Hampton Wick (via National Rail Darwin).
             Set <code>TFL_API_KEY</code> env var for higher rate limits.
         </div>
 
