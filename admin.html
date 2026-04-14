@@ -94,6 +94,63 @@
     .mode-card.selected .mode-name { color: #6ea8fe; }
     .mode-card.selected .mode-desc { color: #8ab4f8; }
 
+    /* ── Feed checkboxes ──────────────────── */
+    .feed-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .feed-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #242424;
+      border: 1px solid #333;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 12px 14px;
+      min-width: 160px;
+      user-select: none;
+      transition: border-color 0.15s;
+    }
+
+    .feed-check:hover { border-color: #555; }
+    .feed-check.checked { border-color: #6ea8fe; background: #1a2433; }
+
+    .feed-check input[type="checkbox"] {
+      accent-color: #6ea8fe;
+      width: 14px;
+      height: 14px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .feed-check .feed-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #eee;
+      margin-bottom: 3px;
+    }
+
+    .feed-check.checked .feed-name { color: #6ea8fe; }
+
+    .feed-check .feed-desc {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    #section-feeds {
+      transition: opacity 0.2s;
+    }
+
+    #section-feeds.dimmed {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
     /* ── Form fields ──────────────────────── */
     .field {
       display: flex;
@@ -222,6 +279,14 @@
     </div>
   </section>
 
+  <!-- Random Mix feeds -->
+  <section id="section-feeds">
+    <h2>Random Mix feeds <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#444;font-size:11px">— used by Random Mix mode (and Smart outside commute hours)</span></h2>
+    <div class="feed-grid" id="feedGrid">
+      <div style="color:#555;font-size:12px;font-family:monospace">Loading…</div>
+    </div>
+  </section>
+
   <!-- Train settings -->
   <section id="section-trains">
     <h2>Train Settings</h2>
@@ -257,6 +322,7 @@
   const apiBase = window.location.origin;
   let currentSettings = {};
   let selectedMode = null;
+  let selectedFeeds = new Set();
 
   // ── Boot ─────────────────────────────────
   async function init() {
@@ -270,7 +336,9 @@
       const res = await fetch(`${apiBase}/api/v1/admin/settings`);
       const data = await res.json();
       currentSettings = data;
+      selectedFeeds = new Set(data.randomFeeds || []);
       renderModes(data.availableModes, data.mode);
+      renderFeeds(data.availableFeeds || []);
       document.getElementById('stationInput').value = data.trainStation || 'HMW';
     } catch (e) {
       showStatus('Failed to load settings', 'err');
@@ -290,12 +358,48 @@
       card.addEventListener('click', () => selectMode(m.id));
       grid.appendChild(card);
     });
+    updateFeedsDim(activeMode);
   }
 
   function selectMode(id) {
     selectedMode = id;
     document.querySelectorAll('.mode-card').forEach(c => {
       c.classList.toggle('selected', c.dataset.mode === id);
+    });
+    updateFeedsDim(id);
+  }
+
+  function updateFeedsDim(modeId) {
+    const feedsSection = document.getElementById('section-feeds');
+    const usesMix = (modeId === 'mix' || modeId === 'smart');
+    feedsSection.classList.toggle('dimmed', !usesMix);
+  }
+
+  // ── Render feed checkboxes ────────────────
+  function renderFeeds(feeds) {
+    const grid = document.getElementById('feedGrid');
+    grid.innerHTML = '';
+    feeds.forEach(f => {
+      const checked = selectedFeeds.has(f.id);
+      const label = document.createElement('label');
+      label.className = 'feed-check' + (checked ? ' checked' : '');
+      label.dataset.feed = f.id;
+      label.innerHTML = `
+        <input type="checkbox" ${checked ? 'checked' : ''}>
+        <div>
+          <div class="feed-name">${f.name}</div>
+          <div class="feed-desc">${f.description}</div>
+        </div>`;
+      label.querySelector('input').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          selectedFeeds.add(f.id);
+          label.classList.add('checked');
+        } else {
+          selectedFeeds.delete(f.id);
+          label.classList.remove('checked');
+        }
+      });
+      grid.appendChild(label);
     });
   }
 
@@ -308,6 +412,7 @@
     const payload = {
       mode: selectedMode,
       trainStation: document.getElementById('stationInput').value.trim().toUpperCase() || 'HMW',
+      randomFeeds: Array.from(selectedFeeds),
     };
 
     try {

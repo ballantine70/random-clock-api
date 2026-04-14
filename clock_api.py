@@ -33,10 +33,16 @@ RTT_TOKEN_URL = 'https://data.rtt.io/api/get_access_token'
 RTT_URL = 'https://data.rtt.io/rtt/location'
 WALK_TIME_MINS = 15  # minutes walk to Hampton Wick station
 
+# ── Poem/1 external feed ──────────────────────────────────────────────────────
+POEM_TOWN_URL     = 'https://poem.town/api/v1/clock/compose'
+POEM_TOWN_API_KEY = os.environ.get('POEM_TOWN_API_KEY', '')
+
 # ── News & Weather ────────────────────────────────────────────────────────────
-BBC_RSS_URL     = 'https://feeds.bbci.co.uk/news/rss.xml'
-OPEN_METEO_URL  = 'https://api.open-meteo.com/v1/forecast'
-HW_LAT, HW_LON  = 51.4145, -0.3125   # Hampton Wick
+BBC_RSS_URL      = 'https://feeds.bbci.co.uk/news/rss.xml'
+OPEN_METEO_URL   = 'https://api.open-meteo.com/v1/forecast'
+AIR_QUALITY_URL  = 'https://air-quality-api.open-meteo.com/v1/air-quality'
+EA_STATIONS_URL  = 'https://environment.data.gov.uk/flood-monitoring/id/stations'
+HW_LAT, HW_LON   = 51.4145, -0.3125   # Hampton Wick
 
 WMO_DESCRIPTIONS = {
     0: 'Clear sky',
@@ -50,8 +56,17 @@ WMO_DESCRIPTIONS = {
     95: 'Thunderstorm', 96: 'Thunderstorm & hail', 99: 'Heavy thunderstorm',
 }
 
+AQI_LABELS = [(20, 'Good'), (40, 'Fair'), (60, 'Moderate'),
+              (80, 'Poor'), (100, 'Very poor'), (float('inf'), 'Hazardous')]
+
+def aqi_label(aqi):
+    return next(label for threshold, label in AQI_LABELS if aqi <= threshold)
+
 _news_cache    = {'data': None, 'at': None}
 _weather_cache = {'data': None, 'at': None}
+_river_cache   = {'data': None, 'at': None, 'station_id': None, 'station_name': None}
+_air_cache     = {'data': None, 'at': None}
+_poem1_cache   = {'data': None, 'minute': None}
 
 def get_news_headlines(count=5):
     """Fetch top BBC News headlines, cached for 1 hour."""
@@ -109,7 +124,126 @@ def get_weather():
         return _weather_cache['data'], str(exc)
 
 
-INFO_CYCLE = 6   # 5 news slots + 1 weather slot
+def get_river_level():
+    """Fetch Thames river level near Hampton Wick from Environment Agency, cached 15 min."""
+    now = datetime.now()
+    if _river_cache['data'] is not None and _river_cache['at'] and \
+            (now - _river_cache['at']) < timedelta(minutes=15):
+        return _river_cache['data'], None
+    try:
+        # Resolve nearest gauge station on first call (cached for life of process)
+        if not _river_cache['station_id']:
+            resp = http_requests.get(
+                EA_STATIONS_URL,
+                params={'lat': HW_LAT, 'long': HW_LON, 'dist': 5,
+                        'type': 'SingleLevel', '_limit': 10},
+                timeout=8,
+            )
+            resp.raise_for_status()
+            items = resp.json().get('items', [])
+            # Prefer a Thames river gauge
+            station = next(
+                (s for s in items if 'thames' in s.get('riverName', '').lower()
+                 or 'thames' in s.get('label', '').lower()),
+                items[0] if items else None,
+            )
+            if not station:
+                return None, 'No river gauge found near Hampton Wick'
+            _river_cache['station_id']   = station['@id'].split('/')[-1]
+            _river_cache['station_name'] = station.get('label', 'River Thames')
+
+        # Fetch the two most recent readings to determine trend
+        resp = http_requests.get(
+            f"{EA_STATIONS_URL}/{_river_cache['station_id']}/readings",
+            params={'_sorted': True, '_limit': 2},
+            timeout=8,
+        )
+        resp.raise_for_status()
+        readings = resp.json().get('items', [])
+        if not readings:
+            return None, 'No readings returned'
+
+        latest = readings[0].get('value')
+        previous = readings[1].get('value') if len(readings) > 1 else None
+        if latest is None:
+            return None, 'Reading value missing'
+
+        if previous is not None:
+            diff = latest - previous
+            trend = 'Rising' if diff > 0.01 else ('Falling' if diff < -0.01 else 'Steady')
+        else:
+            trend = 'Steady'
+
+        data = {
+            'level': round(latest, 2),
+            'trend': trend,
+            'station': _river_cache['station_name'],
+        }
+        _river_cache['data'] = data
+        _river_cache['at']   = now
+        return data, None
+    except Exception as exc:
+        return _river_cache['data'], str(exc)
+
+
+def get_air_quality():
+    """Fetch air quality for Hampton Wick from Open-Meteo, cached 30 min."""
+    now = datetime.now()
+    if _air_cache['data'] is not None and _air_cache['at'] and \
+            (now - _air_cache['at']) < timedelta(minutes=30):
+        return _air_cache['data'], None
+    try:
+        resp = http_requests.get(
+            AIR_QUALITY_URL,
+            params={
+                'latitude': HW_LAT,
+                'longitude': HW_LON,
+                'current': 'european_aqi,pm2_5,pm10,nitrogen_dioxide',
+                'timezone': 'Europe/London',
+            },
+            timeout=8,
+        )
+        resp.raise_for_status()
+        c = resp.json().get('current', {})
+        aqi = round(c.get('european_aqi', 0))
+        data = {
+            'aqi':   aqi,
+            'label': aqi_label(aqi),
+            'pm25':  round(c.get('pm2_5', 0), 1),
+            'pm10':  round(c.get('pm10', 0), 1),
+            'no2':   round(c.get('nitrogen_dioxide', 0), 1),
+        }
+        _air_cache['data'] = data
+        _air_cache['at']   = now
+        return data, None
+    except Exception as exc:
+        return _air_cache['data'], str(exc)
+
+
+def get_poem1_content(time24, minute_of_day):
+    """Proxy a poem from poem.town for the current minute, cached per-minute."""
+    if _poem1_cache['data'] is not None and _poem1_cache['minute'] == minute_of_day:
+        return _poem1_cache['data'], None
+    try:
+        headers = {'Content-Type': 'application/json'}
+        if POEM_TOWN_API_KEY:
+            headers['Authorization'] = f'Bearer {POEM_TOWN_API_KEY}'
+        resp = http_requests.post(
+            POEM_TOWN_URL,
+            json={'time24': time24},
+            headers=headers,
+            timeout=8,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        _poem1_cache['data'] = data
+        _poem1_cache['minute'] = minute_of_day
+        return data, None
+    except Exception as exc:
+        return _poem1_cache['data'], str(exc)
+
+
+INFO_CYCLE = 8   # 5 news + weather + river + air quality
 
 def get_info_content(minute_of_day):
     """Return (kind, content, error) for the current info cycle position."""
@@ -118,16 +252,22 @@ def get_info_content(minute_of_day):
         headlines, error = get_news_headlines(5)
         content = headlines[position] if position < len(headlines) else None
         return 'news', content, error
-    else:
+    elif position == 5:
         weather, error = get_weather()
         return 'weather', weather, error
+    elif position == 6:
+        river, error = get_river_level()
+        return 'river', river, error
+    else:
+        air, error = get_air_quality()
+        return 'air', air, error
 
 
 def format_info_poem(kind, content, time24):
-    """Format a news headline or weather snapshot as a poem string."""
+    """Format a news/weather/river/air snapshot as a poem string."""
     if kind == 'news':
         return f"{time24} — BBC News\n{content}" if content else f"{time24} — News unavailable"
-    else:
+    elif kind == 'weather':
         if not content:
             return f"{time24} — Weather unavailable"
         return (
@@ -135,21 +275,49 @@ def format_info_poem(kind, content, time24):
             f"{content['temp']}°C  {content['description']}\n"
             f"Wind {content['wind_mph']}mph  Feels like {content['feels_like']}°C"
         )
+    elif kind == 'river':
+        if not content:
+            return f"{time24} — River level unavailable"
+        trend = content.get('trend', '')
+        trend_str = f"  {trend}" if trend else ''
+        return (
+            f"{time24} — Thames at {content['station']}\n"
+            f"Level: {content['level']}m{trend_str}"
+        )
+    else:  # air
+        if not content:
+            return f"{time24} — Air quality unavailable"
+        return (
+            f"{time24} — Hampton Wick air\n"
+            f"{content['label']} (AQI {content['aqi']})\n"
+            f"PM2.5: {content['pm25']}  PM10: {content['pm10']}  NO\u2082: {content['no2']}"
+        )
 
 
 # ── Admin settings ────────────────────────────────────────────────────────────
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.json')
 
 DEFAULT_SETTINGS = {
-    'mode': 'smart',        # random | trains | alternating | smart
-    'trainStation': 'HMW',  # 3-letter CRS code
+    'mode': 'mix',
+    'trainStation': 'HMW',
+    'randomFeeds': ['clock', 'trains', 'info', 'poem1'],
 }
 
 AVAILABLE_MODES = [
     {
+        'id': 'mix',
+        'name': 'Random Mix',
+        'description': 'Each minute picks randomly from your selected feeds',
+    },
+    {
+        'id': 'smart',
+        'name': 'Smart (commute)',
+        'description': 'Trains 6:30–8:30am, random mix at other times',
+    },
+    {
         'id': 'random',
         'name': 'Random Clock',
-        'description': 'Always shows random content from the book',
+        'description': 'Always shows content from Random the Book',
     },
     {
         'id': 'trains',
@@ -157,19 +325,32 @@ AVAILABLE_MODES = [
         'description': 'Always shows upcoming train departures',
     },
     {
-        'id': 'alternating',
-        'name': 'Alternating',
-        'description': 'Switches between random and trains each minute',
+        'id': 'info',
+        'name': 'News & Weather',
+        'description': 'BBC headlines, weather, river level & air quality cycling each minute',
+    },
+]
+
+AVAILABLE_FEEDS = [
+    {
+        'id': 'clock',
+        'name': 'Random Clock',
+        'description': 'Content from Random the Book',
     },
     {
-        'id': 'smart',
-        'name': 'Smart (commute)',
-        'description': 'Trains during commute hours, random clock otherwise',
+        'id': 'trains',
+        'name': 'Train Departures',
+        'description': 'Next trains from Hampton Wick',
     },
     {
         'id': 'info',
         'name': 'News & Weather',
-        'description': '5 BBC headlines then Hampton Wick weather, cycling each minute',
+        'description': 'BBC headlines, weather, river level & air quality',
+    },
+    {
+        'id': 'poem1',
+        'name': 'Poem/1',
+        'description': 'Live poems from poem.town',
     },
 ]
 
@@ -221,10 +402,9 @@ def get_rtt_access_token():
     except http_requests.exceptions.RequestException as exc:
         return None, str(exc)
 
-# Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
+# Commute window (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
 COMMUTE_WINDOWS = [
-    (6,  0,  9, 30),   # morning:  06:00 – 09:30
-    (16, 0, 19, 30),   # evening:  16:00 – 19:30
+    (6, 30, 8, 30),   # morning: 06:30 – 08:30
 ]
 
 def is_commute_time(hour, minute):
@@ -234,6 +414,14 @@ def is_commute_time(hour, minute):
         sh * 60 + sm <= t <= eh * 60 + em
         for sh, sm, eh, em in COMMUTE_WINDOWS
     )
+
+def pick_mix_feed(minute_of_day, enabled_feeds):
+    """Pick a feed deterministically for this minute (consistent across devices)."""
+    if not enabled_feeds:
+        return 'clock'
+    rng = SeededRandom(get_today_seed() * 1440 + minute_of_day)
+    idx = int(rng.next() * len(enabled_feeds))
+    return enabled_feeds[min(idx, len(enabled_feeds) - 1)]
 
 # Load the content database
 with open('random_clock_content.json', 'r') as f:
@@ -568,9 +756,71 @@ def trains_compose():
     return jsonify(response)
 
 
+def _compose_feed(feed_id, time24, hour, minute, minute_of_day):
+    """Build a response dict for a single named feed."""
+    if feed_id == 'trains':
+        trains, error = get_train_departures()
+        poem = format_trains_poem(trains, time24)
+        poem_id = generate_poem_id(time24, poem)
+        resp = {
+            'poemId': poem_id, 'time24': time24, 'poem': poem,
+            'preferredFont': 'INTER', 'screensaver': False,
+            'mode': 'trains', 'trains': trains,
+        }
+        if error:
+            resp['error'] = error
+        return resp
+
+    if feed_id == 'info':
+        kind, content, error = get_info_content(minute_of_day)
+        poem = format_info_poem(kind, content, time24)
+        poem_id = generate_poem_id(time24, poem)
+        resp = {
+            'poemId': poem_id, 'time24': time24, 'poem': poem,
+            'preferredFont': 'INTER', 'screensaver': False,
+            'mode': f'info:{kind}',
+        }
+        if error:
+            resp['error'] = error
+        return resp
+
+    if feed_id == 'poem1':
+        data, error = get_poem1_content(time24, minute_of_day)
+        if data and data.get('poem'):
+            resp = {
+                'poemId':        data.get('poemId', generate_poem_id(time24, 'poem1')),
+                'time24':        time24,
+                'poem':          data['poem'],
+                'preferredFont': data.get('preferredFont', 'INTER'),
+                'screensaver':   data.get('screensaver', False),
+                'mode':          'poem1',
+            }
+        else:
+            poem = f"{time24} — poem.town unavailable"
+            resp = {
+                'poemId': generate_poem_id(time24, poem),
+                'time24': time24, 'poem': poem,
+                'preferredFont': 'INTER', 'screensaver': False,
+                'mode': 'poem1',
+            }
+        if error:
+            resp['error'] = error
+        return resp
+
+    # 'clock' or unknown — random book content
+    schedule = generate_daily_schedule()
+    content = schedule[minute_of_day]['content'].replace('–', '-')
+    poem = f"{time24} — {content}"
+    poem_id = generate_poem_id(time24, poem)
+    return {
+        'poemId': poem_id, 'time24': time24, 'poem': poem,
+        'preferredFont': 'INTER', 'screensaver': False,
+        'mode': 'clock',
+    }
+
+
 def _compose(body):
     """Shared compose logic — respects current admin mode setting."""
-    # Determine UK local time from the request body
     if 'time24' in body:
         time24 = body['time24']
         hour, minute = map(int, time24.split(':'))
@@ -585,59 +835,27 @@ def _compose(body):
         time24 = now.strftime('%H:%M')
         hour, minute = now.hour, now.minute
 
-    mode = load_settings().get('mode', 'smart')
+    settings = load_settings()
+    mode = settings.get('mode', 'mix')
     minute_of_day = hour * 60 + minute
 
-    show_trains = (
-        mode == 'trains'
-        or (mode == 'alternating' and minute_of_day % 2 == 1)
-        or (mode == 'smart' and is_commute_time(hour, minute))
-    )
+    if mode == 'smart':
+        if is_commute_time(hour, minute):
+            return _compose_feed('trains', time24, hour, minute, minute_of_day)
+        # Outside commute window — fall through to mix
+        mode = 'mix'
 
-    if mode == 'info':
-        kind, content, error = get_info_content(minute_of_day)
-        poem = format_info_poem(kind, content, time24)
-        poem_id = generate_poem_id(time24, poem)
-        response = {
-            'poemId': poem_id,
-            'time24': time24,
-            'poem': poem,
-            'preferredFont': 'INTER',
-            'screensaver': False,
-            'mode': f'info:{kind}',
-        }
-        if error:
-            response['error'] = error
-    elif show_trains:
-        trains, error = get_train_departures()
-        poem = format_trains_poem(trains, time24)
-        poem_id = generate_poem_id(time24, poem)
-        response = {
-            'poemId': poem_id,
-            'time24': time24,
-            'poem': poem,
-            'preferredFont': 'INTER',
-            'screensaver': False,
-            'mode': 'trains',
-            'trains': trains,
-        }
-        if error:
-            response['error'] = error
-    else:
-        schedule = generate_daily_schedule()
-        content = schedule[minute_of_day]['content'].replace('–', '-')
-        poem = f"{time24} — {content}"
-        poem_id = generate_poem_id(time24, poem)
-        response = {
-            'poemId': poem_id,
-            'time24': time24,
-            'poem': poem,
-            'preferredFont': 'INTER',
-            'screensaver': False,
-            'mode': 'clock',
-        }
+    if mode == 'mix':
+        enabled_feeds = settings.get('randomFeeds') or ['clock']
+        feed = pick_mix_feed(minute_of_day, enabled_feeds)
+        return _compose_feed(feed, time24, hour, minute, minute_of_day)
 
-    return response
+    # Fixed modes
+    if mode in ('trains', 'info', 'poem1'):
+        return _compose_feed(mode, time24, hour, minute, minute_of_day)
+
+    # 'random' or any unknown → always random book content
+    return _compose_feed('clock', time24, hour, minute, minute_of_day)
 
 
 @app.route('/api/v1/compose', methods=['POST'])
@@ -675,19 +893,22 @@ def trains_get():
 @app.route('/api/v1/admin/settings', methods=['GET'])
 def admin_get_settings():
     settings = load_settings()
-    return jsonify({**settings, 'availableModes': AVAILABLE_MODES})
+    return jsonify({**settings, 'availableModes': AVAILABLE_MODES, 'availableFeeds': AVAILABLE_FEEDS})
 
 @app.route('/api/v1/admin/settings', methods=['POST'])
 def admin_save_settings():
     body = request.get_json(force=True, silent=True) or {}
-    allowed = {'mode', 'trainStation'}
+    allowed = {'mode', 'trainStation', 'randomFeeds'}
     updates = {k: v for k, v in body.items() if k in allowed}
     if 'mode' in updates and updates['mode'] not in {m['id'] for m in AVAILABLE_MODES}:
         return jsonify({'error': f"Unknown mode: {updates['mode']}"}), 400
     if 'trainStation' in updates:
         updates['trainStation'] = updates['trainStation'].upper().strip()[:3]
+    if 'randomFeeds' in updates:
+        valid_ids = {f['id'] for f in AVAILABLE_FEEDS}
+        updates['randomFeeds'] = [f for f in updates['randomFeeds'] if f in valid_ids]
     saved = save_settings(updates)
-    return jsonify({**saved, 'availableModes': AVAILABLE_MODES})
+    return jsonify({**saved, 'availableModes': AVAILABLE_MODES, 'availableFeeds': AVAILABLE_FEEDS})
 
 @app.route('/admin', methods=['GET'])
 def admin():
