@@ -87,8 +87,8 @@ class SeededRandom:
         return self.seed / 233280
 
 def get_today_seed():
-    """Get today's date as seed (YYYYMMDD format)"""
-    now = datetime.now()
+    """Get today's date as seed (YYYYMMDD format) in UK local time"""
+    now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
     return int(now.strftime('%Y%m%d'))
 
 def shuffle_with_seed(array, seed):
@@ -115,12 +115,12 @@ def generate_daily_schedule():
     return shuffle_with_seed(tripled, seed)
 
 def get_current_minute():
-    """Get current minute of day (0-1439)"""
-    now = datetime.now()
+    """Get current minute of day (0-1439) in UK local time"""
+    now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
     return now.hour * 60 + now.minute
 
-def get_train_departures(count=4):
-    """Fetch upcoming departures from Hampton Wick via Realtime Trains API.
+def get_train_departures():
+    """Fetch departures from Hampton Wick in the next 30 minutes via RTT API.
     Returns (list_of_trains, error_string_or_None).
     """
     if not RTT_TOKEN:
@@ -134,7 +134,7 @@ def get_train_departures(count=4):
         resp = http_requests.get(
             RTT_URL,
             headers={'Authorization': f'Bearer {access_token}'},
-            params={'code': 'gb-nr:HMW', 'timeWindow': 120},
+            params={'code': 'gb-nr:HMW', 'timeWindow': 30},
             timeout=8,
         )
         resp.raise_for_status()
@@ -142,38 +142,38 @@ def get_train_departures(count=4):
     except http_requests.exceptions.RequestException as exc:
         return [], str(exc)
 
-    def parse_iso_time(iso_str):
-        """Parse ISO 8601 datetime string → UK local HH:MM, or None on failure."""
+    def parse_iso_dt(iso_str):
+        """Parse ISO 8601 string → timezone-aware datetime, or None."""
         if not iso_str:
             return None
         try:
             dt = datetime.fromisoformat(iso_str.replace('Z', '+00:00'))
-            if UK_TZ:
-                dt = dt.astimezone(UK_TZ)
-            return dt.strftime('%H:%M')
+            return dt.astimezone(UK_TZ) if UK_TZ else dt
         except (ValueError, AttributeError):
             return None
 
     trains = []
     for svc in all_services:
-        if len(trains) >= count:
-            break
-
         temporal = svc.get('temporalData') or {}
         departure = temporal.get('departure')
         if not departure:
-            continue  # pass-through, not a stopping departure
+            continue  # pass-through, not a stopping service
 
         cancelled = departure.get('isCancelled', False)
-        scheduled = parse_iso_time(departure.get('scheduleAdvertised'))
-        estimated = parse_iso_time(departure.get('realtimeEstimate'))
+        sched_dt  = parse_iso_dt(departure.get('scheduleAdvertised'))
+        est_dt    = parse_iso_dt(departure.get('realtimeEstimate'))
+
+        scheduled = sched_dt.strftime('%H:%M') if sched_dt else '?'
 
         if cancelled:
             display_time = 'CANC'
-        elif estimated and estimated != scheduled:
-            display_time = estimated  # running late — show revised time
+            delay_mins   = 0
+        elif est_dt and sched_dt:
+            delay_mins   = max(0, int((est_dt - sched_dt).total_seconds() / 60))
+            display_time = est_dt.strftime('%H:%M') if delay_mins else scheduled
         else:
-            display_time = scheduled or '?'
+            display_time = scheduled
+            delay_mins   = 0
 
         destinations = svc.get('destination') or []
         destination = destinations[0].get('location', {}).get('description', 'Unknown') if destinations else 'Unknown'
@@ -183,13 +183,19 @@ def get_train_departures(count=4):
         platform = plat.get('actual') or plat.get('planned')
         platform_display = f'Plat {platform}' if platform else 'Plat ?'
 
-        status = 'Cancelled' if cancelled else ('On time' if display_time == scheduled else f'Exp {estimated}')
+        if cancelled:
+            status = 'Cancelled'
+        elif delay_mins:
+            status = f'+{delay_mins}m late'
+        else:
+            status = 'On time'
 
         trains.append({
             'time': display_time,
             'destination': destination,
             'platform': platform_display,
             'scheduled': scheduled,
+            'delay_mins': delay_mins,
             'status': status,
         })
 
@@ -199,12 +205,13 @@ def get_train_departures(count=4):
 def format_trains_poem(trains, time24):
     """Format a list of train departures as a poem string for Poem/1 devices."""
     if not trains:
-        return f"{time24} — No departures found from Hampton Wick"
+        return f"{time24} — No departures in next 30 min from Hampton Wick"
 
     lines = [f"{time24} — Hampton Wick departures"]
     for t in trains:
-        dest = t['destination'][:22].ljust(22)
-        lines.append(f"{t['time']}  {dest}  {t['platform']}")
+        dest   = t['destination'][:18].ljust(18)
+        status = t['status']
+        lines.append(f"{t['time']}  {dest}  {t['platform']}  {status}")
     return '\n'.join(lines)
 
 
@@ -274,7 +281,7 @@ def compose():
         minute = dt.hour * 60 + dt.minute
     else:
         # Default to current time
-        now = datetime.now()
+        now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
         time24 = now.strftime('%H:%M')
         minute = get_current_minute()
     
@@ -350,9 +357,9 @@ def clock_get():
     minute = get_current_minute()
     current_item = schedule[minute]
     
-    now = datetime.now()
+    now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
     time24 = now.strftime('%H:%M')
-    
+
     return jsonify({
         'time': time24,
         'content': current_item['content'],
@@ -412,10 +419,10 @@ def trains_compose():
         dt = datetime.fromisoformat(body['geolocate'].replace('Z', '+00:00'))
         time24 = dt.strftime('%H:%M')
     else:
-        now = datetime.now()
+        now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
         time24 = now.strftime('%H:%M')
 
-    trains, error = get_train_departures(count=4)
+    trains, error = get_train_departures()
 
     poem = format_trains_poem(trains, time24)
     poem_id = generate_poem_id(time24, poem)
@@ -461,7 +468,7 @@ def smart_compose():
         hour, minute = now.hour, now.minute
 
     if is_commute_time(hour, minute):
-        trains, error = get_train_departures(count=4)
+        trains, error = get_train_departures()
         poem = format_trains_poem(trains, time24)
         poem_id = generate_poem_id(time24, poem)
         response = {
@@ -496,9 +503,9 @@ def smart_compose():
 @app.route('/api/v1/trains', methods=['GET'])
 def trains_get():
     """Convenience GET endpoint — returns live Hampton Wick departures."""
-    trains, error = get_train_departures(count=4)
+    trains, error = get_train_departures()
 
-    now = datetime.now()
+    now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
     time24 = now.strftime('%H:%M')
 
     response = {
