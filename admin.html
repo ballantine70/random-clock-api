@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Clock — Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      background: #1a1a1a;
+      color: #ccc;
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+
+    .page {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    header {
+      border-bottom: 1px solid #333;
+      padding-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #eee;
+      letter-spacing: -0.01em;
+    }
+
+    header p {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* ── Sections ─────────────────────────── */
+    section h2 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    /* ── Mode cards ───────────────────────── */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .mode-card {
+      background: #242424;
+      border: 2px solid #333;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 16px;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+
+    .mode-card:hover {
+      border-color: #555;
+      background: #2a2a2a;
+    }
+
+    .mode-card.selected {
+      border-color: #6ea8fe;
+      background: #1a2433;
+    }
+
+    .mode-card .mode-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #eee;
+      margin-bottom: 5px;
+    }
+
+    .mode-card .mode-desc {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .mode-card.selected .mode-name { color: #6ea8fe; }
+    .mode-card.selected .mode-desc { color: #8ab4f8; }
+
+    /* ── Form fields ──────────────────────── */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 220px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .field input {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 5px;
+      color: #eee;
+      font-family: monospace;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      padding: 8px 12px;
+      text-transform: uppercase;
+      width: 100%;
+    }
+
+    .field input:focus {
+      border-color: #6ea8fe;
+      outline: none;
+    }
+
+    .field .hint {
+      font-size: 11px;
+      color: #555;
+    }
+
+    /* ── Save button ──────────────────────── */
+    .save-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    button.save-btn {
+      background: #6ea8fe;
+      border: none;
+      border-radius: 6px;
+      color: #0d1117;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 24px;
+      transition: background 0.15s;
+    }
+
+    button.save-btn:hover { background: #8abbff; }
+    button.save-btn:active { background: #5090e0; }
+    button.save-btn:disabled { background: #333; color: #555; cursor: default; }
+
+    .save-status {
+      font-size: 12px;
+      color: #555;
+      transition: color 0.3s;
+    }
+
+    .save-status.ok  { color: #57ab5a; }
+    .save-status.err { color: #e5534b; }
+
+    /* ── Preview panel ────────────────────── */
+    .preview-box {
+      background: #f2f0eb;
+      border-radius: 6px;
+      padding: 28px 24px;
+      min-height: 100px;
+    }
+
+    .preview-poem {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #1a1a1a;
+      white-space: pre-wrap;
+    }
+
+    .preview-meta {
+      font-size: 11px;
+      color: #666;
+      margin-top: 10px;
+      font-family: monospace;
+    }
+
+    .preview-error {
+      font-size: 12px;
+      color: #c0392b;
+      font-family: monospace;
+    }
+
+    /* ── Nav links ────────────────────────── */
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .nav-links a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover { color: #aaa; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>Random Clock — Admin</h1>
+    <p>Configure the clock mode and train settings.</p>
+  </header>
+
+  <!-- Mode selection -->
+  <section id="section-mode">
+    <h2>Mode</h2>
+    <div class="mode-grid" id="modeGrid">
+      <div class="mode-card" style="opacity:.4">Loading…</div>
+    </div>
+  </section>
+
+  <!-- Train settings -->
+  <section id="section-trains">
+    <h2>Train Settings</h2>
+    <div class="field">
+      <label for="stationInput">Station code (CRS)</label>
+      <input type="text" id="stationInput" maxlength="3" placeholder="HMW" autocomplete="off">
+      <span class="hint">3-letter National Rail CRS code — default is HMW (Hampton Wick)</span>
+    </div>
+  </section>
+
+  <!-- Save -->
+  <div class="save-row">
+    <button class="save-btn" id="saveBtn" onclick="saveSettings()">Save settings</button>
+    <span class="save-status" id="saveStatus"></span>
+  </div>
+
+  <!-- Live preview -->
+  <section>
+    <h2>Preview <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#444;font-size:11px">— what the device sees right now</span></h2>
+    <div class="preview-box">
+      <div id="previewContent"><span style="color:#888;font-size:12px;font-family:monospace">Loading…</span></div>
+    </div>
+  </section>
+
+  <div class="nav-links">
+    <a href="/simulator">Device Simulator</a>
+    <a href="/">API Docs</a>
+  </div>
+
+</div>
+
+<script>
+  const apiBase = window.location.origin;
+  let currentSettings = {};
+  let selectedMode = null;
+
+  // ── Boot ─────────────────────────────────
+  async function init() {
+    await loadSettings();
+    refreshPreview();
+  }
+
+  // ── Load settings from API ────────────────
+  async function loadSettings() {
+    try {
+      const res = await fetch(`${apiBase}/api/v1/admin/settings`);
+      const data = await res.json();
+      currentSettings = data;
+      renderModes(data.availableModes, data.mode);
+      document.getElementById('stationInput').value = data.trainStation || 'HMW';
+    } catch (e) {
+      showStatus('Failed to load settings', 'err');
+    }
+  }
+
+  // ── Render mode cards ─────────────────────
+  function renderModes(modes, activeMode) {
+    selectedMode = activeMode;
+    const grid = document.getElementById('modeGrid');
+    grid.innerHTML = '';
+    modes.forEach(m => {
+      const card = document.createElement('div');
+      card.className = 'mode-card' + (m.id === activeMode ? ' selected' : '');
+      card.dataset.mode = m.id;
+      card.innerHTML = `<div class="mode-name">${m.name}</div><div class="mode-desc">${m.description}</div>`;
+      card.addEventListener('click', () => selectMode(m.id));
+      grid.appendChild(card);
+    });
+  }
+
+  function selectMode(id) {
+    selectedMode = id;
+    document.querySelectorAll('.mode-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.mode === id);
+    });
+  }
+
+  // ── Save settings ─────────────────────────
+  async function saveSettings() {
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    showStatus('Saving…', '');
+
+    const payload = {
+      mode: selectedMode,
+      trainStation: document.getElementById('stationInput').value.trim().toUpperCase() || 'HMW',
+    };
+
+    try {
+      const res = await fetch(`${apiBase}/api/v1/admin/settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      currentSettings = data;
+      showStatus('Saved', 'ok');
+      refreshPreview();
+    } catch (e) {
+      showStatus(`Error: ${e.message}`, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function showStatus(msg, cls) {
+    const el = document.getElementById('saveStatus');
+    el.textContent = msg;
+    el.className = 'save-status' + (cls ? ` ${cls}` : '');
+    if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = 'save-status'; }, 3000);
+  }
+
+  // ── Live preview ──────────────────────────
+  async function refreshPreview() {
+    const el = document.getElementById('previewContent');
+    try {
+      const res = await fetch(`${apiBase}/api/v1/compose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ geolocate: new Date().toISOString() }),
+      });
+      const data = await res.json();
+      let html = `<div class="preview-poem">${escHtml(data.poem || '')}</div>`;
+      html += `<div class="preview-meta">mode: ${data.mode || '?'} &nbsp;|&nbsp; id: ${data.poemId || '?'}</div>`;
+      if (data.error) html += `<div class="preview-error">API error: ${escHtml(data.error)}</div>`;
+      el.innerHTML = html;
+    } catch (e) {
+      el.innerHTML = `<div class="preview-error">Could not load preview: ${e.message}</div>`;
+    }
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Refresh preview every minute on the minute boundary
+  function schedulePreviewRefresh() {
+    const now = new Date();
+    const ms = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    setTimeout(() => { refreshPreview(); schedulePreviewRefresh(); }, ms);
+  }
+
+  init();
+  schedulePreviewRefresh();
+</script>
+</body>
+</html>
