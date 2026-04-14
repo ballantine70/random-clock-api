@@ -313,55 +313,14 @@ def status():
 
 @app.route('/api/v1/clock/compose', methods=['POST'])
 def compose():
-    """Main compose endpoint - returns poem for current time"""
+    """Main compose endpoint — now mode-aware, delegates to shared logic."""
     if REQUIRE_AUTH and not check_auth():
         return jsonify({'error': 'Unauthorized'}), 401
-    
     try:
         body = request.get_json(force=True, silent=True) or {}
-    except:
+    except Exception:
         body = {}
-    
-    # Extract time from request
-    if 'time24' in body:
-        time24 = body['time24']
-        # Parse HH:MM to get minute of day
-        hours, mins = map(int, time24.split(':'))
-        minute = hours * 60 + mins
-    elif 'geolocate' in body:
-        # Parse ISO datetime and extract time
-        dt = datetime.fromisoformat(body['geolocate'].replace('Z', '+00:00'))
-        # Convert to local time (you may want to handle timezone properly)
-        time24 = dt.strftime('%H:%M')
-        minute = dt.hour * 60 + dt.minute
-    else:
-        # Default to current time
-        now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
-        time24 = now.strftime('%H:%M')
-        minute = get_current_minute()
-    
-    # Get content for this minute
-    schedule = generate_daily_schedule()
-    current_item = schedule[minute]
-    
-    # Replace en-dashes in content with regular hyphens (e-ink wrapping issue)
-    content = current_item['content'].replace('–', '-')
-    
-    # Format as poem with time prepended
-    poem = f"{time24} — {content}"
-    
-    # Generate poem ID
-    poem_id = generate_poem_id(time24, poem)
-    
-    response = {
-        'poemId': poem_id,
-        'time24': time24,
-        'poem': poem,
-        'preferredFont': 'INTER',
-        'screensaver': False
-    }
-    
-    return jsonify(response)
+    return jsonify(_compose(body))
 
 @app.route('/api/v1/clock/notes/<note_id>/seen', methods=['POST'])
 def mark_note_seen(note_id):
@@ -496,18 +455,9 @@ def trains_compose():
     return jsonify(response)
 
 
-@app.route('/api/v1/compose', methods=['POST'])
-def smart_compose():
-    """Combined Poem/1 endpoint — trains during commute hours, clock otherwise."""
-    if REQUIRE_AUTH and not check_auth():
-        return jsonify({'error': 'Unauthorized'}), 401
-
-    try:
-        body = request.get_json(force=True, silent=True) or {}
-    except Exception:
-        body = {}
-
-    # Determine UK local time from the request
+def _compose(body):
+    """Shared compose logic — respects current admin mode setting."""
+    # Determine UK local time from the request body
     if 'time24' in body:
         time24 = body['time24']
         hour, minute = map(int, time24.split(':'))
@@ -560,7 +510,19 @@ def smart_compose():
             'mode': 'clock',
         }
 
-    return jsonify(response)
+    return response
+
+
+@app.route('/api/v1/compose', methods=['POST'])
+def smart_compose():
+    """Poem/1 endpoint — mode-aware smart compose."""
+    if REQUIRE_AUTH and not check_auth():
+        return jsonify({'error': 'Unauthorized'}), 401
+    try:
+        body = request.get_json(force=True, silent=True) or {}
+    except Exception:
+        body = {}
+    return jsonify(_compose(body))
 
 
 @app.route('/api/v1/trains', methods=['GET'])
