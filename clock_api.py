@@ -196,12 +196,14 @@ def get_train_departures():
         return [], str(exc)
 
     def parse_iso_dt(iso_str):
-        """Parse ISO 8601 string → timezone-aware datetime, or None."""
+        """Parse ISO 8601 string from RTT — times are already UK local, ignore timezone marker."""
         if not iso_str:
             return None
         try:
+            # RTT returns UK local time but marks it as Z (UTC) — strip timezone
+            # info entirely and use the wall-clock value directly.
             dt = datetime.fromisoformat(iso_str.replace('Z', '+00:00'))
-            return dt.astimezone(UK_TZ) if UK_TZ else dt
+            return dt.replace(tzinfo=None)
         except (ValueError, AttributeError):
             return None
 
