@@ -10,6 +10,13 @@ from flask_cors import CORS
 from datetime import datetime
 import json
 import hashlib
+import os
+import requests as http_requests
+try:
+    from zoneinfo import ZoneInfo
+    UK_TZ = ZoneInfo('Europe/London')
+except ImportError:
+    UK_TZ = None
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for browser access
@@ -17,6 +24,11 @@ CORS(app)  # Enable CORS for browser access
 # Configuration
 API_KEY = "poem.randombook"  # Change this to your own key
 REQUIRE_AUTH = False  # Set to True to require authorization header
+
+# TfL API Configuration
+TFL_API_KEY = os.environ.get('TFL_API_KEY', '')
+HAMPTON_WICK_NAPTAN = '910GHMPTNWK'
+TFL_ARRIVALS_URL = f'https://api.tfl.gov.uk/StopPoint/{HAMPTON_WICK_NAPTAN}/Arrivals'
 
 # Load the content database
 with open('random_clock_content.json', 'r') as f:
@@ -64,6 +76,74 @@ def get_current_minute():
     """Get current minute of day (0-1439)"""
     now = datetime.now()
     return now.hour * 60 + now.minute
+
+def get_train_departures(count=4):
+    """Fetch upcoming departures from Hampton Wick via TfL Unified API.
+    Returns (list_of_trains, error_string_or_None).
+    """
+    params = {}
+    if TFL_API_KEY:
+        params['app_key'] = TFL_API_KEY
+
+    try:
+        resp = http_requests.get(TFL_ARRIVALS_URL, params=params, timeout=8)
+        resp.raise_for_status()
+        arrivals = resp.json()
+    except http_requests.exceptions.RequestException as exc:
+        return [], str(exc)
+
+    # Sort ascending by seconds until arrival
+    arrivals.sort(key=lambda x: x.get('timeToStation', 999999))
+
+    trains = []
+    for arrival in arrivals[:count]:
+        # Departure time — convert UTC ISO string to UK local time
+        expected_str = arrival.get('expectedArrival', '')
+        try:
+            expected_dt = datetime.fromisoformat(expected_str.replace('Z', '+00:00'))
+            if UK_TZ:
+                expected_dt = expected_dt.astimezone(UK_TZ)
+            departure_time = expected_dt.strftime('%H:%M')
+        except (ValueError, AttributeError):
+            mins = arrival.get('timeToStation', 0) // 60
+            departure_time = f'+{mins}m'
+
+        # Destination — strip common suffixes
+        destination = arrival.get('destinationName', 'Unknown')
+        for suffix in (' Rail Station', ' Station', ' Underground Station'):
+            destination = destination.replace(suffix, '')
+        destination = destination.strip()
+
+        # Platform
+        platform_raw = arrival.get('platformName', '')
+        if platform_raw:
+            platform = (platform_raw
+                        .replace('Platform ', 'Plat ')
+                        .replace('platform ', 'Plat '))
+        else:
+            platform = 'Plat ?'
+
+        trains.append({
+            'time': departure_time,
+            'destination': destination,
+            'platform': platform,
+            'minutes': arrival.get('timeToStation', 0) // 60,
+        })
+
+    return trains, None
+
+
+def format_trains_poem(trains, time24):
+    """Format a list of train departures as a poem string for Poem/1 devices."""
+    if not trains:
+        return f"{time24} — No departures found from Hampton Wick"
+
+    lines = [f"{time24} — Hampton Wick departures"]
+    for t in trains:
+        dest = t['destination'][:22].ljust(22)
+        lines.append(f"{t['time']}  {dest}  {t['platform']}")
+    return '\n'.join(lines)
+
 
 def check_auth():
     """Check authorization header"""
@@ -251,6 +331,66 @@ def stats():
         'coverage': f'{(len(ITEMS) * 3 / 1440) * 100:.1f}%'
     })
 
+@app.route('/api/v1/trains/compose', methods=['POST'])
+def trains_compose():
+    """Poem/1 compatible endpoint — returns next 4 Hampton Wick departures."""
+    if REQUIRE_AUTH and not check_auth():
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    try:
+        body = request.get_json(force=True, silent=True) or {}
+    except Exception:
+        body = {}
+
+    # Determine display time (same logic as /compose)
+    if 'time24' in body:
+        time24 = body['time24']
+    elif 'geolocate' in body:
+        dt = datetime.fromisoformat(body['geolocate'].replace('Z', '+00:00'))
+        time24 = dt.strftime('%H:%M')
+    else:
+        now = datetime.now()
+        time24 = now.strftime('%H:%M')
+
+    trains, error = get_train_departures(count=4)
+
+    poem = format_trains_poem(trains, time24)
+    poem_id = generate_poem_id(time24, poem)
+
+    response = {
+        'poemId': poem_id,
+        'time24': time24,
+        'poem': poem,
+        'preferredFont': 'INTER',
+        'screensaver': False,
+        'trains': trains,
+    }
+    if error:
+        response['error'] = error
+
+    return jsonify(response)
+
+
+@app.route('/api/v1/trains', methods=['GET'])
+def trains_get():
+    """Convenience GET endpoint — returns live Hampton Wick departures."""
+    trains, error = get_train_departures(count=4)
+
+    now = datetime.now()
+    time24 = now.strftime('%H:%M')
+
+    response = {
+        'time': time24,
+        'station': 'Hampton Wick',
+        'trains': trains,
+        'timestamp': now.isoformat(),
+    }
+    if error:
+        response['error'] = error
+
+    return jsonify(response)
+
+
 @app.route('/', methods=['GET'])
 def index():
     """Simple index page with API documentation"""
@@ -297,11 +437,25 @@ def index():
             Unlike a poem
         </div>
         
+        <h2>Train Departures Mode — Hampton Wick Station:</h2>
+
+        <div class="endpoint">
+            <strong>POST /api/v1/trains/compose</strong><br>
+            Poem/1 compatible — returns next 4 departures from Hampton Wick (via TfL API).
+            Set <code>TFL_API_KEY</code> env var for higher rate limits.
+        </div>
+
+        <div class="endpoint">
+            <strong>GET /api/v1/trains</strong><br>
+            Live departure board for Hampton Wick (convenience endpoint).
+        </div>
+
         <h2>Convenience Endpoints (for testing):</h2>
         <ul>
             <li><a href="/api/v1/clock">/api/v1/clock</a> - Current minute's content (GET)</li>
             <li><a href="/api/v1/clock/minute/720">/api/v1/clock/minute/720</a> - Content for minute 720 (GET)</li>
             <li><a href="/api/v1/clock/stats">/api/v1/clock/stats</a> - Database statistics (GET)</li>
+            <li><a href="/api/v1/trains">/api/v1/trains</a> - Live Hampton Wick departures (GET)</li>
         </ul>
         
         <h2>Test /compose endpoint:</h2>
@@ -337,7 +491,6 @@ def index():
     '''
 
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get('PORT', 5000))
     print('Starting Random Clock API server (Poem/1 compatible)...')
     print(f'Port: {port}')
