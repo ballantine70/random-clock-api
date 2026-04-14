@@ -5,7 +5,7 @@ Serves time-synchronized content from Random the Book
 Compatible with poem.town Device API spec
 """
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from datetime import datetime
 import json
@@ -389,6 +389,12 @@ def trains_get():
         response['error'] = error
 
     return jsonify(response)
+
+
+@app.route('/simulator', methods=['GET'])
+def simulator():
+    """Poem/1 device simulator for testing the API"""
+    return send_from_directory('.', 'simulator.html')
 
 
 @app.route('/', methods=['GET'])

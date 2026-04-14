@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poem/1 Clock Simulator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      background: #2a2a2a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      gap: 20px;
+    }
+
+    h1 {
+      color: #aaa;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── Controls ─────────────────────────────── */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .controls label {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .controls input[type="text"] {
+      background: #3a3a3a;
+      border: 1px solid #555;
+      color: #ddd;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      width: 260px;
+      font-family: monospace;
+    }
+
+    .controls input[type="text"]:focus {
+      outline: none;
+      border-color: #888;
+    }
+
+    .mode-tabs {
+      display: flex;
+      border: 1px solid #555;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .mode-tabs button {
+      background: #3a3a3a;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 6px 14px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mode-tabs button.active {
+      background: #555;
+      color: #eee;
+    }
+
+    .mode-tabs button:hover:not(.active) {
+      background: #444;
+      color: #ccc;
+    }
+
+    button.refresh-btn {
+      background: #3a3a3a;
+      border: 1px solid #555;
+      border-radius: 5px;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 6px 14px;
+      transition: background 0.15s;
+    }
+
+    button.refresh-btn:hover { background: #444; color: #ddd; }
+    button.refresh-btn:active { background: #555; }
+
+    /* ── Device frame ─────────────────────────── */
+    .device {
+      background: #1a1a1a;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      width: 100%;
+      max-width: 540px;
+    }
+
+    .device-screen {
+      background: #f2f0eb;
+      border-radius: 6px;
+      padding: 36px 32px;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      transition: opacity 0.2s;
+    }
+
+    .device-screen.refreshing {
+      opacity: 0.4;
+    }
+
+    .poem-text {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.65;
+      color: #1a1a1a;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .poem-text.mono {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .error-text {
+      font-family: monospace;
+      font-size: 13px;
+      color: #c0392b;
+    }
+
+    .device-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding: 0 4px;
+    }
+
+    .poem-id {
+      color: #666;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    .countdown {
+      color: #666;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    .countdown.soon { color: #e67e22; }
+
+    /* ── Debug panel ──────────────────────────── */
+    .debug-toggle {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      padding: 4px 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .debug-toggle:hover { color: #999; }
+
+    .debug-panel {
+      background: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #7ec8a0;
+      display: none;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      max-height: 260px;
+      overflow-y: auto;
+      padding: 14px 16px;
+      white-space: pre-wrap;
+      width: 100%;
+      max-width: 540px;
+      word-break: break-all;
+    }
+
+    .debug-panel.visible { display: block; }
+  </style>
+</head>
+<body>
+
+  <h1>Poem/1 Clock Simulator</h1>
+
+  <div class="controls">
+    <label>API&nbsp;
+      <input type="text" id="apiBase" placeholder="http://localhost:5000">
+    </label>
+
+    <div class="mode-tabs">
+      <button class="active" data-mode="clock">Random Clock</button>
+      <button data-mode="trains">Train Departures</button>
+    </div>
+
+    <button class="refresh-btn" id="refreshBtn">↻ Refresh</button>
+  </div>
+
+  <div class="device">
+    <div class="device-screen" id="screen">
+      <div class="poem-text" id="poemText">Loading…</div>
+    </div>
+    <div class="device-footer">
+      <span class="poem-id" id="poemId"></span>
+      <span class="countdown" id="countdown"></span>
+    </div>
+  </div>
+
+  <button class="debug-toggle" id="debugToggle">show raw response</button>
+  <pre class="debug-panel" id="debugPanel"></pre>
+
+  <script>
+    const apiBaseInput = document.getElementById('apiBase');
+    const screen       = document.getElementById('screen');
+    const poemText     = document.getElementById('poemText');
+    const poemIdEl     = document.getElementById('poemId');
+    const countdownEl  = document.getElementById('countdown');
+    const debugToggle  = document.getElementById('debugToggle');
+    const debugPanel   = document.getElementById('debugPanel');
+    const refreshBtn   = document.getElementById('refreshBtn');
+    const modeTabs     = document.querySelectorAll('.mode-tabs button');
+
+    // Default API base to same origin
+    apiBaseInput.value = window.location.origin;
+
+    let currentMode = 'clock';
+    let secondsUntilRefresh = 0;
+    let nextRefreshTimeout = null;
+    let countdownInterval = null;
+
+    // ── Mode tabs ──────────────────────────────
+    modeTabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeTabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+        fetchContent();
+      });
+    });
+
+    // ── Debug toggle ───────────────────────────
+    debugToggle.addEventListener('click', () => {
+      const visible = debugPanel.classList.toggle('visible');
+      debugToggle.textContent = visible ? 'hide raw response' : 'show raw response';
+    });
+
+    // ── Manual refresh ─────────────────────────
+    refreshBtn.addEventListener('click', () => {
+      clearTimeout(nextRefreshTimeout);
+      fetchContent();
+    });
+
+    // ── Fetch content ──────────────────────────
+    async function fetchContent() {
+      screen.classList.add('refreshing');
+
+      const base    = apiBaseInput.value.replace(/\/$/, '');
+      const endpoint = currentMode === 'trains'
+        ? `${base}/api/v1/trains/compose`
+        : `${base}/api/v1/clock/compose`;
+
+      try {
+        const res  = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ geolocate: new Date().toISOString() }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+
+        const data = await res.json();
+
+        // Update screen
+        poemText.textContent = data.poem || '(empty response)';
+        poemText.className   = currentMode === 'trains' ? 'poem-text mono' : 'poem-text';
+        poemIdEl.textContent = data.poemId ? `id: ${data.poemId}` : '';
+
+        debugPanel.textContent = JSON.stringify(data, null, 2);
+
+        if (data.error) {
+          poemText.textContent += `\n\n⚠ API error: ${data.error}`;
+        }
+
+      } catch (err) {
+        poemText.innerHTML = '';
+        const el = document.createElement('div');
+        el.className = 'error-text';
+        el.textContent = `Error: ${err.message}\n\nCheck that the API server is running and the base URL is correct.`;
+        poemText.appendChild(el);
+        poemIdEl.textContent = '';
+        debugPanel.textContent = err.toString();
+      }
+
+      screen.classList.remove('refreshing');
+      scheduleNextRefresh();
+    }
+
+    // ── Auto-refresh synced to minute boundary ─
+    function msUntilNextMinute() {
+      const now = new Date();
+      return (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    }
+
+    function scheduleNextRefresh() {
+      clearTimeout(nextRefreshTimeout);
+      const ms = msUntilNextMinute();
+      secondsUntilRefresh = Math.ceil(ms / 1000);
+      nextRefreshTimeout = setTimeout(fetchContent, ms);
+    }
+
+    // ── Countdown ticker ───────────────────────
+    function updateCountdown() {
+      const now = new Date();
+      const secs = 60 - now.getSeconds();
+      countdownEl.textContent = `next refresh in ${secs}s`;
+      countdownEl.className = `countdown${secs <= 10 ? ' soon' : ''}`;
+    }
+
+    countdownInterval = setInterval(updateCountdown, 1000);
+
+    // ── Boot ───────────────────────────────────
+    fetchContent();
+  </script>
+</body>
+</html>
