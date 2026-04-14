@@ -51,48 +51,76 @@
       margin-bottom: 12px;
     }
 
-    /* ── Mode cards ───────────────────────── */
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
+    /* ── Smart mode toggle ────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
-    .mode-card {
-      background: #242424;
-      border: 2px solid #333;
-      border-radius: 8px;
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: #333;
+      border-radius: 12px;
       cursor: pointer;
-      padding: 16px;
-      transition: border-color 0.15s, background 0.15s;
-      user-select: none;
+      transition: background 0.2s;
     }
 
-    .mode-card:hover {
-      border-color: #555;
-      background: #2a2a2a;
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: #888;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
     }
 
-    .mode-card.selected {
-      border-color: #6ea8fe;
+    .toggle-switch input:checked + .toggle-track {
       background: #1a2433;
+      border: 1px solid #6ea8fe;
     }
 
-    .mode-card .mode-name {
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(20px);
+      background: #6ea8fe;
+    }
+
+    .toggle-label {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      cursor: pointer;
+    }
+
+    .toggle-label .label-name {
       font-size: 13px;
       font-weight: 600;
       color: #eee;
-      margin-bottom: 5px;
     }
 
-    .mode-card .mode-desc {
+    .toggle-label .label-desc {
       font-size: 11px;
       color: #666;
       line-height: 1.4;
     }
-
-    .mode-card.selected .mode-name { color: #6ea8fe; }
-    .mode-card.selected .mode-desc { color: #8ab4f8; }
 
     /* ── Feed checkboxes ──────────────────── */
     .feed-grid {
@@ -140,15 +168,6 @@
       font-size: 11px;
       color: #666;
       line-height: 1.4;
-    }
-
-    #section-feeds {
-      transition: opacity 0.2s;
-    }
-
-    #section-feeds.dimmed {
-      opacity: 0.35;
-      pointer-events: none;
     }
 
     /* ── Form fields ──────────────────────── */
@@ -268,27 +287,34 @@
 
   <header>
     <h1>Random Clock — Admin</h1>
-    <p>Configure the clock mode and train settings.</p>
+    <p>Configure feeds and commute mode.</p>
   </header>
 
-  <!-- Mode selection -->
-  <section id="section-mode">
-    <h2>Mode</h2>
-    <div class="mode-grid" id="modeGrid">
-      <div class="mode-card" style="opacity:.4">Loading…</div>
+  <!-- Smart mode toggle -->
+  <section>
+    <h2>Commute mode</h2>
+    <div class="toggle-row">
+      <label class="toggle-switch">
+        <input type="checkbox" id="smartToggle">
+        <span class="toggle-track"></span>
+      </label>
+      <label class="toggle-label" for="smartToggle">
+        <span class="label-name">Smart mode</span>
+        <span class="label-desc">Show train departures 6:30–8:30am instead of your feed mix</span>
+      </label>
     </div>
   </section>
 
-  <!-- Random Mix feeds -->
-  <section id="section-feeds">
-    <h2>Random Mix feeds <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#444;font-size:11px">— used by Random Mix mode (and Smart outside commute hours)</span></h2>
+  <!-- Feed selection -->
+  <section>
+    <h2>Feeds <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#444;font-size:11px">— at least one must be selected</span></h2>
     <div class="feed-grid" id="feedGrid">
       <div style="color:#555;font-size:12px;font-family:monospace">Loading…</div>
     </div>
   </section>
 
   <!-- Train settings -->
-  <section id="section-trains">
+  <section>
     <h2>Train Settings</h2>
     <div class="field">
       <label for="stationInput">Station code (CRS)</label>
@@ -320,8 +346,6 @@
 
 <script>
   const apiBase = window.location.origin;
-  let currentSettings = {};
-  let selectedMode = null;
   let selectedFeeds = new Set();
 
   // ── Boot ─────────────────────────────────
@@ -335,44 +359,13 @@
     try {
       const res = await fetch(`${apiBase}/api/v1/admin/settings`);
       const data = await res.json();
-      currentSettings = data;
+      document.getElementById('smartToggle').checked = data.smartMode !== false;
       selectedFeeds = new Set(data.randomFeeds || []);
-      renderModes(data.availableModes, data.mode);
       renderFeeds(data.availableFeeds || []);
       document.getElementById('stationInput').value = data.trainStation || 'HMW';
     } catch (e) {
       showStatus('Failed to load settings', 'err');
     }
-  }
-
-  // ── Render mode cards ─────────────────────
-  function renderModes(modes, activeMode) {
-    selectedMode = activeMode;
-    const grid = document.getElementById('modeGrid');
-    grid.innerHTML = '';
-    modes.forEach(m => {
-      const card = document.createElement('div');
-      card.className = 'mode-card' + (m.id === activeMode ? ' selected' : '');
-      card.dataset.mode = m.id;
-      card.innerHTML = `<div class="mode-name">${m.name}</div><div class="mode-desc">${m.description}</div>`;
-      card.addEventListener('click', () => selectMode(m.id));
-      grid.appendChild(card);
-    });
-    updateFeedsDim(activeMode);
-  }
-
-  function selectMode(id) {
-    selectedMode = id;
-    document.querySelectorAll('.mode-card').forEach(c => {
-      c.classList.toggle('selected', c.dataset.mode === id);
-    });
-    updateFeedsDim(id);
-  }
-
-  function updateFeedsDim(modeId) {
-    const feedsSection = document.getElementById('section-feeds');
-    const usesMix = (modeId === 'mix' || modeId === 'smart');
-    feedsSection.classList.toggle('dimmed', !usesMix);
   }
 
   // ── Render feed checkboxes ────────────────
@@ -390,11 +383,17 @@
           <div class="feed-name">${f.name}</div>
           <div class="feed-desc">${f.description}</div>
         </div>`;
-      label.querySelector('input').addEventListener('change', (e) => {
+      label.querySelector('input').addEventListener('change', e => {
         if (e.target.checked) {
           selectedFeeds.add(f.id);
           label.classList.add('checked');
         } else {
+          // Enforce minimum one selection
+          if (selectedFeeds.size <= 1) {
+            e.target.checked = true;
+            showStatus('At least one feed must be selected', 'err');
+            return;
+          }
           selectedFeeds.delete(f.id);
           label.classList.remove('checked');
         }
@@ -405,12 +404,17 @@
 
   // ── Save settings ─────────────────────────
   async function saveSettings() {
+    if (selectedFeeds.size === 0) {
+      showStatus('At least one feed must be selected', 'err');
+      return;
+    }
+
     const btn = document.getElementById('saveBtn');
     btn.disabled = true;
     showStatus('Saving…', '');
 
     const payload = {
-      mode: selectedMode,
+      smartMode: document.getElementById('smartToggle').checked,
       trainStation: document.getElementById('stationInput').value.trim().toUpperCase() || 'HMW',
       randomFeeds: Array.from(selectedFeeds),
     };
@@ -421,9 +425,10 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      currentSettings = data;
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
       showStatus('Saved', 'ok');
       refreshPreview();
     } catch (e) {

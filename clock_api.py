@@ -301,38 +301,10 @@ def format_info_poem(kind, content, time24):
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.json')
 
 DEFAULT_SETTINGS = {
-    'mode': 'mix',
+    'smartMode': True,
     'trainStation': 'HMW',
     'randomFeeds': ['clock', 'trains', 'info', 'poem1'],
 }
-
-AVAILABLE_MODES = [
-    {
-        'id': 'mix',
-        'name': 'Random Mix',
-        'description': 'Each minute picks randomly from your selected feeds',
-    },
-    {
-        'id': 'smart',
-        'name': 'Smart (commute)',
-        'description': 'Trains 6:30–8:30am, random mix at other times',
-    },
-    {
-        'id': 'random',
-        'name': 'Random Clock',
-        'description': 'Always shows content from Random the Book',
-    },
-    {
-        'id': 'trains',
-        'name': 'Train Departures',
-        'description': 'Always shows upcoming train departures',
-    },
-    {
-        'id': 'info',
-        'name': 'News & Weather',
-        'description': 'BBC headlines, weather, river level & air quality cycling each minute',
-    },
-]
 
 AVAILABLE_FEEDS = [
     {
@@ -840,26 +812,14 @@ def _compose(body):
         hour, minute = now.hour, now.minute
 
     settings = load_settings()
-    mode = settings.get('mode', 'mix')
     minute_of_day = hour * 60 + minute
 
-    if mode == 'smart':
-        if is_commute_time(hour, minute):
-            return _compose_feed('trains', time24, hour, minute, minute_of_day)
-        # Outside commute window — fall through to mix
-        mode = 'mix'
+    if settings.get('smartMode', True) and is_commute_time(hour, minute):
+        return _compose_feed('trains', time24, hour, minute, minute_of_day)
 
-    if mode == 'mix':
-        enabled_feeds = settings.get('randomFeeds') or ['clock']
-        feed = pick_mix_feed(minute_of_day, enabled_feeds)
-        return _compose_feed(feed, time24, hour, minute, minute_of_day)
-
-    # Fixed modes
-    if mode in ('trains', 'info', 'poem1'):
-        return _compose_feed(mode, time24, hour, minute, minute_of_day)
-
-    # 'random' or any unknown → always random book content
-    return _compose_feed('clock', time24, hour, minute, minute_of_day)
+    enabled_feeds = settings.get('randomFeeds') or ['clock']
+    feed = pick_mix_feed(minute_of_day, enabled_feeds)
+    return _compose_feed(feed, time24, hour, minute, minute_of_day)
 
 
 @app.route('/api/v1/compose', methods=['POST'])
@@ -897,22 +857,25 @@ def trains_get():
 @app.route('/api/v1/admin/settings', methods=['GET'])
 def admin_get_settings():
     settings = load_settings()
-    return jsonify({**settings, 'availableModes': AVAILABLE_MODES, 'availableFeeds': AVAILABLE_FEEDS})
+    return jsonify({**settings, 'availableFeeds': AVAILABLE_FEEDS})
 
 @app.route('/api/v1/admin/settings', methods=['POST'])
 def admin_save_settings():
     body = request.get_json(force=True, silent=True) or {}
-    allowed = {'mode', 'trainStation', 'randomFeeds'}
+    allowed = {'smartMode', 'trainStation', 'randomFeeds'}
     updates = {k: v for k, v in body.items() if k in allowed}
-    if 'mode' in updates and updates['mode'] not in {m['id'] for m in AVAILABLE_MODES}:
-        return jsonify({'error': f"Unknown mode: {updates['mode']}"}), 400
+    if 'smartMode' in updates:
+        updates['smartMode'] = bool(updates['smartMode'])
     if 'trainStation' in updates:
         updates['trainStation'] = updates['trainStation'].upper().strip()[:3]
     if 'randomFeeds' in updates:
         valid_ids = {f['id'] for f in AVAILABLE_FEEDS}
-        updates['randomFeeds'] = [f for f in updates['randomFeeds'] if f in valid_ids]
+        feeds = [f for f in updates['randomFeeds'] if f in valid_ids]
+        if not feeds:
+            return jsonify({'error': 'At least one feed must be selected'}), 400
+        updates['randomFeeds'] = feeds
     saved = save_settings(updates)
-    return jsonify({**saved, 'availableModes': AVAILABLE_MODES, 'availableFeeds': AVAILABLE_FEEDS})
+    return jsonify({**saved, 'availableFeeds': AVAILABLE_FEEDS})
 
 @app.route('/admin', methods=['GET'])
 def admin():
