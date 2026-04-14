@@ -25,9 +25,10 @@ CORS(app)  # Enable CORS for browser access
 API_KEY = "poem.randombook"  # Change this to your own key
 REQUIRE_AUTH = False  # Set to True to require authorization header
 
-# National Rail departures via Huxley2 (Darwin REST wrapper)
-# Hampton Wick CRS code: HMW
-HUXLEY2_URL = 'https://huxley2.azurewebsites.net/departures/HMW/{count}'
+# National Rail departures via Realtime Trains API (RTT)
+# Register at realtimetrains.co.uk — set RTT_TOKEN to the Bearer token from your token details page
+RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
+RTT_URL = 'https://data.rtt.io/v1/station/HMW/departures'
 
 # Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
 COMMUTE_WINDOWS = [
@@ -91,43 +92,54 @@ def get_current_minute():
     return now.hour * 60 + now.minute
 
 def get_train_departures(count=4):
-    """Fetch upcoming departures from Hampton Wick via Huxley2 (National Rail Darwin).
+    """Fetch upcoming departures from Hampton Wick via Realtime Trains API.
     Returns (list_of_trains, error_string_or_None).
     """
+    if not RTT_TOKEN:
+        return [], 'RTT_TOKEN environment variable is not set'
+
     try:
         resp = http_requests.get(
-            HUXLEY2_URL.format(count=count),
+            RTT_URL,
+            headers={'Authorization': f'Bearer {RTT_TOKEN}'},
             timeout=8,
         )
         resp.raise_for_status()
-        services = resp.json().get('trainServices') or []
+        services = resp.json().get('services') or []
     except http_requests.exceptions.RequestException as exc:
         return [], str(exc)
 
     trains = []
-    for svc in services:
-        std = svc.get('std', '')   # scheduled departure HH:MM
-        etd = svc.get('etd', '')   # estimated: HH:MM | "On time" | "Delayed" | "Cancelled"
+    for svc in services[:count]:
+        detail = svc.get('locationDetail', {})
 
-        if etd == 'Cancelled':
+        # Times come as 'HHMM' — reformat to 'HH:MM'
+        def fmt(t):
+            return f'{t[:2]}:{t[2:]}' if t and len(t) == 4 else t or '?'
+
+        scheduled = fmt(detail.get('gbttBookedDeparture', ''))
+        realtime  = fmt(detail.get('realtimeDeparture', ''))
+        cancelled = detail.get('cancelReasonCode') or svc.get('isCancelled')
+
+        if cancelled:
             display_time = 'CANC'
-        elif etd and etd != 'On time' and ':' in etd:
-            display_time = etd     # running late — show revised time
+        elif realtime and realtime != scheduled:
+            display_time = realtime   # running late — show revised time
         else:
-            display_time = std     # on time — show scheduled time
+            display_time = scheduled  # on time
 
         destinations = svc.get('destination') or []
-        destination = destinations[0].get('locationName', 'Unknown') if destinations else 'Unknown'
+        destination = destinations[0].get('description', 'Unknown') if destinations else 'Unknown'
 
-        platform = svc.get('platform')
+        platform = detail.get('platform')
         platform_display = f'Plat {platform}' if platform else 'Plat ?'
 
         trains.append({
             'time': display_time,
             'destination': destination,
             'platform': platform_display,
-            'scheduled': std,
-            'status': etd,
+            'scheduled': scheduled,
+            'status': 'Cancelled' if cancelled else ('On time' if display_time == scheduled else f'Exp {realtime}'),
         })
 
     return trains, None
