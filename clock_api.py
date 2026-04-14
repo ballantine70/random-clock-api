@@ -31,6 +31,58 @@ RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
 RTT_TOKEN_URL = 'https://data.rtt.io/api/get_access_token'
 RTT_URL = 'https://data.rtt.io/rtt/location'
 
+# ── Admin settings ────────────────────────────────────────────────────────────
+SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.json')
+
+DEFAULT_SETTINGS = {
+    'mode': 'smart',        # random | trains | alternating | smart
+    'trainStation': 'HMW',  # 3-letter CRS code
+}
+
+AVAILABLE_MODES = [
+    {
+        'id': 'random',
+        'name': 'Random Clock',
+        'description': 'Always shows random content from the book',
+    },
+    {
+        'id': 'trains',
+        'name': 'Train Departures',
+        'description': 'Always shows upcoming train departures',
+    },
+    {
+        'id': 'alternating',
+        'name': 'Alternating',
+        'description': 'Switches between random and trains each minute',
+    },
+    {
+        'id': 'smart',
+        'name': 'Smart (commute)',
+        'description': 'Trains during commute hours, random clock otherwise',
+    },
+]
+
+_settings_cache = None
+
+def load_settings():
+    global _settings_cache
+    if _settings_cache is not None:
+        return _settings_cache
+    try:
+        with open(SETTINGS_FILE) as f:
+            _settings_cache = {**DEFAULT_SETTINGS, **json.load(f)}
+    except (FileNotFoundError, json.JSONDecodeError):
+        _settings_cache = DEFAULT_SETTINGS.copy()
+    return _settings_cache
+
+def save_settings(updates):
+    global _settings_cache
+    current = load_settings()
+    _settings_cache = {**current, **updates}
+    with open(SETTINGS_FILE, 'w') as f:
+        json.dump(_settings_cache, f, indent=2)
+    return _settings_cache
+
 # In-memory access token cache
 _rtt_access_token = None
 _rtt_access_token_expiry = None
@@ -131,10 +183,11 @@ def get_train_departures():
         return [], f'Failed to obtain RTT access token: {err}'
 
     try:
+        station = load_settings().get('trainStation', 'HMW').upper()
         resp = http_requests.get(
             RTT_URL,
             headers={'Authorization': f'Bearer {access_token}'},
-            params={'code': 'gb-nr:HMW', 'timeWindow': 30},
+            params={'code': f'gb-nr:{station}', 'timeWindow': 30},
             timeout=8,
         )
         resp.raise_for_status()
@@ -467,7 +520,16 @@ def smart_compose():
         time24 = now.strftime('%H:%M')
         hour, minute = now.hour, now.minute
 
-    if is_commute_time(hour, minute):
+    mode = load_settings().get('mode', 'smart')
+    minute_of_day = hour * 60 + minute
+
+    show_trains = (
+        mode == 'trains'
+        or (mode == 'alternating' and minute_of_day % 2 == 1)
+        or (mode == 'smart' and is_commute_time(hour, minute))
+    )
+
+    if show_trains:
         trains, error = get_train_departures()
         poem = format_trains_poem(trains, time24)
         poem_id = generate_poem_id(time24, poem)
@@ -483,7 +545,6 @@ def smart_compose():
         if error:
             response['error'] = error
     else:
-        minute_of_day = hour * 60 + minute
         schedule = generate_daily_schedule()
         content = schedule[minute_of_day]['content'].replace('–', '-')
         poem = f"{time24} — {content}"
@@ -519,6 +580,28 @@ def trains_get():
 
     return jsonify(response)
 
+
+@app.route('/api/v1/admin/settings', methods=['GET'])
+def admin_get_settings():
+    settings = load_settings()
+    return jsonify({**settings, 'availableModes': AVAILABLE_MODES})
+
+@app.route('/api/v1/admin/settings', methods=['POST'])
+def admin_save_settings():
+    body = request.get_json(force=True, silent=True) or {}
+    allowed = {'mode', 'trainStation'}
+    updates = {k: v for k, v in body.items() if k in allowed}
+    if 'mode' in updates and updates['mode'] not in {m['id'] for m in AVAILABLE_MODES}:
+        return jsonify({'error': f"Unknown mode: {updates['mode']}"}), 400
+    if 'trainStation' in updates:
+        updates['trainStation'] = updates['trainStation'].upper().strip()[:3]
+    saved = save_settings(updates)
+    return jsonify({**saved, 'availableModes': AVAILABLE_MODES})
+
+@app.route('/admin', methods=['GET'])
+def admin():
+    """Admin control panel"""
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'admin.html')
 
 @app.route('/simulator', methods=['GET'])
 def simulator():
