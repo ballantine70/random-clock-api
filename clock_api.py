@@ -27,8 +27,39 @@ REQUIRE_AUTH = False  # Set to True to require authorization header
 
 # TfL API Configuration
 TFL_API_KEY = os.environ.get('TFL_API_KEY', '')
-HAMPTON_WICK_NAPTAN = '910GHMPTNWK'
-TFL_ARRIVALS_URL = f'https://api.tfl.gov.uk/StopPoint/{HAMPTON_WICK_NAPTAN}/Arrivals'
+TFL_SEARCH_URL = 'https://api.tfl.gov.uk/StopPoint/Search/Hampton%20Wick'
+TFL_ARRIVALS_BASE = 'https://api.tfl.gov.uk/StopPoint/{}/Arrivals'
+
+# Cache the resolved stop ID so we only search once per process
+_hampton_wick_stop_id = None
+
+def tfl_params(extra=None):
+    """Build TfL query params, injecting app_key if configured."""
+    p = dict(extra or {})
+    if TFL_API_KEY:
+        p['app_key'] = TFL_API_KEY
+    return p
+
+def resolve_stop_id():
+    """Look up Hampton Wick's TfL StopPoint ID via the search API (cached)."""
+    global _hampton_wick_stop_id
+    if _hampton_wick_stop_id:
+        return _hampton_wick_stop_id, None
+
+    try:
+        resp = http_requests.get(
+            TFL_SEARCH_URL,
+            params=tfl_params({'modes': 'national-rail'}),
+            timeout=8,
+        )
+        resp.raise_for_status()
+        matches = resp.json().get('matches', [])
+        if not matches:
+            return None, 'No stops found matching "Hampton Wick" (national-rail mode)'
+        _hampton_wick_stop_id = matches[0]['id']
+        return _hampton_wick_stop_id, None
+    except http_requests.exceptions.RequestException as exc:
+        return None, str(exc)
 
 # Load the content database
 with open('random_clock_content.json', 'r') as f:
@@ -81,12 +112,16 @@ def get_train_departures(count=4):
     """Fetch upcoming departures from Hampton Wick via TfL Unified API.
     Returns (list_of_trains, error_string_or_None).
     """
-    params = {}
-    if TFL_API_KEY:
-        params['app_key'] = TFL_API_KEY
+    stop_id, err = resolve_stop_id()
+    if not stop_id:
+        return [], err
 
     try:
-        resp = http_requests.get(TFL_ARRIVALS_URL, params=params, timeout=8)
+        resp = http_requests.get(
+            TFL_ARRIVALS_BASE.format(stop_id),
+            params=tfl_params(),
+            timeout=8,
+        )
         resp.raise_for_status()
         arrivals = resp.json()
     except http_requests.exceptions.RequestException as exc:
@@ -330,6 +365,28 @@ def stats():
         'minutes_per_day': 1440,
         'coverage': f'{(len(ITEMS) * 3 / 1440) * 100:.1f}%'
     })
+
+@app.route('/api/v1/trains/debug', methods=['GET'])
+def trains_debug():
+    """Show raw TfL stop search results to help diagnose stop ID issues."""
+    try:
+        resp = http_requests.get(
+            TFL_SEARCH_URL,
+            params=tfl_params({'modes': 'national-rail'}),
+            timeout=8,
+        )
+        resp.raise_for_status()
+        search_data = resp.json()
+    except http_requests.exceptions.RequestException as exc:
+        return jsonify({'error': str(exc)}), 502
+
+    stop_id, _ = resolve_stop_id()
+    return jsonify({
+        'resolvedStopId': stop_id,
+        'searchUrl': resp.url,
+        'matches': search_data.get('matches', []),
+    })
+
 
 @app.route('/api/v1/trains/compose', methods=['POST'])
 def trains_compose():
