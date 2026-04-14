@@ -213,7 +213,8 @@
     </label>
 
     <div class="mode-tabs">
-      <button class="active" data-mode="clock">Random Clock</button>
+      <button data-mode="smart" class="active">Smart (auto)</button>
+      <button data-mode="clock">Random Clock</button>
       <button data-mode="trains">Train Departures</button>
     </div>
 
@@ -281,7 +282,9 @@
       const base    = apiBaseInput.value.replace(/\/$/, '');
       const endpoint = currentMode === 'trains'
         ? `${base}/api/v1/trains/compose`
-        : `${base}/api/v1/clock/compose`;
+        : currentMode === 'smart'
+          ? `${base}/api/v1/compose`
+          : `${base}/api/v1/clock/compose`;
 
       try {
         const res  = await fetch(endpoint, {
@@ -296,7 +299,8 @@
 
         // Update screen
         poemText.textContent = data.poem || '(empty response)';
-        poemText.className   = currentMode === 'trains' ? 'poem-text mono' : 'poem-text';
+        const isMono = currentMode === 'trains' || data.mode === 'trains';
+        poemText.className = isMono ? 'poem-text mono' : 'poem-text';
         poemIdEl.textContent = data.poemId ? `id: ${data.poemId}` : '';
 
         debugPanel.textContent = JSON.stringify(data, null, 2);
