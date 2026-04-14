@@ -394,7 +394,7 @@ def trains_get():
 @app.route('/simulator', methods=['GET'])
 def simulator():
     """Poem/1 device simulator for testing the API"""
-    return send_from_directory('.', 'simulator.html')
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'simulator.html')
 
 
 @app.route('/', methods=['GET'])
