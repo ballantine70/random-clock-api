@@ -30,6 +30,7 @@ REQUIRE_AUTH = False  # Set to True to require authorization header
 RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
 RTT_TOKEN_URL = 'https://data.rtt.io/api/get_access_token'
 RTT_URL = 'https://data.rtt.io/rtt/location'
+WALK_TIME_MINS = 15  # minutes walk to Hampton Wick station
 
 # ── Admin settings ────────────────────────────────────────────────────────────
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.json')
@@ -184,10 +185,12 @@ def get_train_departures():
 
     try:
         station = load_settings().get('trainStation', 'HMW').upper()
+        now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
+        catchable_from = (now + timedelta(minutes=WALK_TIME_MINS)).strftime('%Y-%m-%dT%H:%M:%S')
         resp = http_requests.get(
             RTT_URL,
             headers={'Authorization': f'Bearer {access_token}'},
-            params={'code': f'gb-nr:{station}', 'timeWindow': 30},
+            params={'code': f'gb-nr:{station}', 'timeFrom': catchable_from, 'timeWindow': 30},
             timeout=8,
         )
         resp.raise_for_status()
