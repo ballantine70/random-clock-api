@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import json
 import hashlib
 import os
+import textwrap
 import requests as http_requests
 import xml.etree.ElementTree as ET
 try:
@@ -44,6 +45,16 @@ AIR_QUALITY_URL  = 'https://air-quality-api.open-meteo.com/v1/air-quality'
 EA_STATIONS_URL  = 'https://environment.data.gov.uk/flood-monitoring/id/stations'
 HW_LAT, HW_LON   = 51.4145, -0.3125   # Hampton Wick
 
+# ── TfL service status ────────────────────────────────────────────────────────
+TFL_API_KEY    = os.environ.get('TFL_API_KEY', '')
+TFL_STATUS_URL = 'https://api.tfl.gov.uk/Line/Mode/tube,overground,elizabeth-line,dlr/Status'
+
+# ── UK National Grid carbon intensity ─────────────────────────────────────────
+CARBON_URL = 'https://api.carbonintensity.org.uk/intensity'
+
+# ── Wikipedia On This Day ─────────────────────────────────────────────────────
+ONTHISDAY_URL = 'https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/{month}/{day}'
+
 WMO_DESCRIPTIONS = {
     0: 'Clear sky',
     1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
@@ -67,6 +78,9 @@ _weather_cache = {'data': None, 'at': None}
 _river_cache   = {'data': None, 'at': None, 'station_id': None, 'station_name': None}
 _air_cache     = {'data': None, 'at': None}
 _poem1_cache   = {'data': None, 'minute': None}
+_tfl_cache     = {'data': None, 'at': None}
+_carbon_cache  = {'data': None, 'at': None}
+_otd_cache     = {'data': None, 'date': None}   # On This Day — keyed by date string
 
 def get_news_headlines(count=5):
     """Fetch top BBC News headlines, cached for 1 hour."""
@@ -246,6 +260,91 @@ def get_poem1_content(time24, minute_of_day, forwarded_auth=''):
         return _poem1_cache['data'], str(exc)
 
 
+def get_tfl_status():
+    """Fetch TfL line statuses, cached 5 minutes."""
+    now = datetime.now()
+    if _tfl_cache['data'] is not None and _tfl_cache['at'] and \
+            (now - _tfl_cache['at']) < timedelta(minutes=5):
+        return _tfl_cache['data'], None
+    try:
+        resp = http_requests.get(
+            TFL_STATUS_URL,
+            params={'app_key': TFL_API_KEY} if TFL_API_KEY else {},
+            timeout=8,
+        )
+        resp.raise_for_status()
+        lines = []
+        for line in resp.json():
+            statuses = line.get('lineStatuses') or []
+            if not statuses:
+                continue
+            severity = statuses[0].get('statusSeverity', 10)
+            desc     = statuses[0].get('statusSeverityDescription', 'Unknown')
+            reason   = statuses[0].get('reason', '') or ''
+            # Shorten reason to one sentence
+            short_reason = reason.split('.')[0].strip() if reason else ''
+            lines.append({
+                'name':     line.get('name', ''),
+                'severity': severity,
+                'status':   desc,
+                'reason':   short_reason,
+            })
+        _tfl_cache['data'] = lines
+        _tfl_cache['at']   = now
+        return lines, None
+    except Exception as exc:
+        return _tfl_cache['data'], str(exc)
+
+
+def get_carbon_intensity():
+    """Fetch UK National Grid carbon intensity, cached 30 minutes."""
+    now = datetime.now()
+    if _carbon_cache['data'] is not None and _carbon_cache['at'] and \
+            (now - _carbon_cache['at']) < timedelta(minutes=30):
+        return _carbon_cache['data'], None
+    try:
+        resp = http_requests.get(CARBON_URL, timeout=8)
+        resp.raise_for_status()
+        entry = resp.json()['data'][0]['intensity']
+        data = {
+            'actual':   entry.get('actual'),
+            'forecast': entry.get('forecast'),
+            'index':    (entry.get('index') or '').replace(' ', '\u00a0').title(),
+        }
+        _carbon_cache['data'] = data
+        _carbon_cache['at']   = now
+        return data, None
+    except Exception as exc:
+        return _carbon_cache['data'], str(exc)
+
+
+def get_onthisday(minute_of_day):
+    """Fetch Wikipedia On This Day events, cached for the day. Returns one event."""
+    now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
+    today = now.strftime('%Y-%m-%d')
+    if _otd_cache['data'] is not None and _otd_cache['date'] == today:
+        events = _otd_cache['data']
+    else:
+        try:
+            url = ONTHISDAY_URL.format(month=now.month, day=now.day)
+            resp = http_requests.get(
+                url,
+                headers={'Accept': 'application/json'},
+                timeout=8,
+            )
+            resp.raise_for_status()
+            events = resp.json().get('events') or []
+            _otd_cache['data'] = events
+            _otd_cache['date'] = today
+        except Exception as exc:
+            return _otd_cache['data'] and _otd_cache['data'][0], str(exc)
+    if not events:
+        return None, 'No events found'
+    idx = minute_of_day % len(events)
+    return events[idx], None
+
+
+
 INFO_CYCLE = 8   # 5 news + weather + river + air quality
 
 def get_info_content(minute_of_day):
@@ -326,6 +425,21 @@ AVAILABLE_FEEDS = [
         'id': 'poem1',
         'name': 'Poem/1',
         'description': 'Live poems from poem.town',
+    },
+    {
+        'id': 'tfl',
+        'name': 'TfL Status',
+        'description': 'Tube, Overground, Elizabeth line & DLR service status',
+    },
+    {
+        'id': 'carbon',
+        'name': 'Grid Carbon',
+        'description': 'UK National Grid carbon intensity (gCO₂/kWh)',
+    },
+    {
+        'id': 'onthisday',
+        'name': 'On This Day',
+        'description': 'Historical events from Wikipedia for today\'s date',
     },
 ]
 
@@ -731,6 +845,41 @@ def trains_compose():
     return jsonify(response)
 
 
+def _format_tfl(lines, time24):
+    if not lines:
+        return f"{time24} — TfL Status unavailable"
+    disrupted = [l for l in lines if l['severity'] < 10]
+    good_count = len(lines) - len(disrupted)
+    if not disrupted:
+        return f"{time24} — TfL: All good\nAll {len(lines)} lines normal service"
+    parts = [f"{time24} — TfL Status"]
+    for l in disrupted[:3]:
+        name = l['name'][:14]
+        parts.append(f"{name}: {l['status']}")
+    if good_count:
+        parts.append(f"{good_count} line{'s' if good_count != 1 else ''}: Good service")
+    return '\n'.join(parts)
+
+
+def _format_carbon(data, time24):
+    if not data:
+        return f"{time24} — Grid carbon unavailable"
+    val = data.get('actual') or data.get('forecast', '?')
+    idx = data.get('index', '?')
+    return f"{time24} — UK Grid Carbon\n{val} gCO\u2082/kWh  {idx}"
+
+
+def _format_onthisday(event, time24):
+    if not event:
+        return f"{time24} — On This Day\nNo events found"
+    year = event.get('year', '?')
+    raw  = event.get('text', '')
+    # Wrap to ~36 chars, max 2 lines
+    lines = textwrap.wrap(raw, 36)[:2]
+    body  = '\n'.join(lines)
+    return f"{time24} — On This Day\n{year}  {body}"
+
+
 def _compose_feed(feed_id, time24, hour, minute, minute_of_day):
     """Build a response dict for a single named feed."""
     if feed_id == 'trains':
@@ -779,6 +928,42 @@ def _compose_feed(feed_id, time24, hour, minute, minute_of_day):
                 'preferredFont': 'INTER', 'screensaver': False,
                 'mode': 'poem1',
             }
+        if error:
+            resp['error'] = error
+        return resp
+
+    if feed_id == 'tfl':
+        lines, error = get_tfl_status()
+        poem = _format_tfl(lines, time24)
+        poem_id = generate_poem_id(time24, poem)
+        resp = {
+            'poemId': poem_id, 'time24': time24, 'poem': poem,
+            'preferredFont': 'INTER', 'screensaver': False, 'mode': 'tfl',
+        }
+        if error:
+            resp['error'] = error
+        return resp
+
+    if feed_id == 'carbon':
+        data, error = get_carbon_intensity()
+        poem = _format_carbon(data, time24)
+        poem_id = generate_poem_id(time24, poem)
+        resp = {
+            'poemId': poem_id, 'time24': time24, 'poem': poem,
+            'preferredFont': 'INTER', 'screensaver': False, 'mode': 'carbon',
+        }
+        if error:
+            resp['error'] = error
+        return resp
+
+    if feed_id == 'onthisday':
+        event, error = get_onthisday(minute_of_day)
+        poem = _format_onthisday(event, time24)
+        poem_id = generate_poem_id(time24, poem)
+        resp = {
+            'poemId': poem_id, 'time24': time24, 'poem': poem,
+            'preferredFont': 'INTER', 'screensaver': False, 'mode': 'onthisday',
+        }
         if error:
             resp['error'] = error
         return resp
