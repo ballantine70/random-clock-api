@@ -12,6 +12,7 @@ import json
 import hashlib
 import os
 import requests as http_requests
+import xml.etree.ElementTree as ET
 try:
     from zoneinfo import ZoneInfo
     UK_TZ = ZoneInfo('Europe/London')
@@ -31,6 +32,110 @@ RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
 RTT_TOKEN_URL = 'https://data.rtt.io/api/get_access_token'
 RTT_URL = 'https://data.rtt.io/rtt/location'
 WALK_TIME_MINS = 15  # minutes walk to Hampton Wick station
+
+# ── News & Weather ────────────────────────────────────────────────────────────
+BBC_RSS_URL     = 'https://feeds.bbci.co.uk/news/rss.xml'
+OPEN_METEO_URL  = 'https://api.open-meteo.com/v1/forecast'
+HW_LAT, HW_LON  = 51.4145, -0.3125   # Hampton Wick
+
+WMO_DESCRIPTIONS = {
+    0: 'Clear sky',
+    1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+    45: 'Fog', 48: 'Icy fog',
+    51: 'Light drizzle', 53: 'Drizzle', 55: 'Heavy drizzle',
+    61: 'Light rain', 63: 'Rain', 65: 'Heavy rain',
+    71: 'Light snow', 73: 'Snow', 75: 'Heavy snow', 77: 'Snow grains',
+    80: 'Light showers', 81: 'Showers', 82: 'Heavy showers',
+    85: 'Snow showers', 86: 'Heavy snow showers',
+    95: 'Thunderstorm', 96: 'Thunderstorm & hail', 99: 'Heavy thunderstorm',
+}
+
+_news_cache    = {'data': None, 'at': None}
+_weather_cache = {'data': None, 'at': None}
+
+def get_news_headlines(count=5):
+    """Fetch top BBC News headlines, cached for 1 hour."""
+    now = datetime.now()
+    if _news_cache['data'] is not None and _news_cache['at'] and \
+            (now - _news_cache['at']) < timedelta(hours=1):
+        return _news_cache['data'], None
+    try:
+        resp = http_requests.get(BBC_RSS_URL, timeout=8)
+        resp.raise_for_status()
+        root = ET.fromstring(resp.content)
+        headlines = []
+        for item in root.findall('./channel/item')[:count]:
+            title = item.findtext('title', '').strip()
+            if title:
+                headlines.append(title)
+        _news_cache['data'] = headlines
+        _news_cache['at']   = now
+        return headlines, None
+    except Exception as exc:
+        return _news_cache['data'] or [], str(exc)
+
+
+def get_weather():
+    """Fetch current weather for Hampton Wick from Open-Meteo, cached for 30 min."""
+    now = datetime.now()
+    if _weather_cache['data'] is not None and _weather_cache['at'] and \
+            (now - _weather_cache['at']) < timedelta(minutes=30):
+        return _weather_cache['data'], None
+    try:
+        resp = http_requests.get(
+            OPEN_METEO_URL,
+            params={
+                'latitude': HW_LAT,
+                'longitude': HW_LON,
+                'current': 'temperature_2m,weather_code,wind_speed_10m,apparent_temperature',
+                'wind_speed_unit': 'mph',
+                'temperature_unit': 'celsius',
+                'timezone': 'Europe/London',
+            },
+            timeout=8,
+        )
+        resp.raise_for_status()
+        c = resp.json().get('current', {})
+        weather = {
+            'temp':       round(c.get('temperature_2m', 0)),
+            'feels_like': round(c.get('apparent_temperature', 0)),
+            'wind_mph':   round(c.get('wind_speed_10m', 0)),
+            'description': WMO_DESCRIPTIONS.get(c.get('weather_code', 0), 'Unknown'),
+        }
+        _weather_cache['data'] = weather
+        _weather_cache['at']   = now
+        return weather, None
+    except Exception as exc:
+        return _weather_cache['data'], str(exc)
+
+
+INFO_CYCLE = 6   # 5 news slots + 1 weather slot
+
+def get_info_content(minute_of_day):
+    """Return (kind, content, error) for the current info cycle position."""
+    position = minute_of_day % INFO_CYCLE
+    if position < 5:
+        headlines, error = get_news_headlines(5)
+        content = headlines[position] if position < len(headlines) else None
+        return 'news', content, error
+    else:
+        weather, error = get_weather()
+        return 'weather', weather, error
+
+
+def format_info_poem(kind, content, time24):
+    """Format a news headline or weather snapshot as a poem string."""
+    if kind == 'news':
+        return f"{time24} — BBC News\n{content}" if content else f"{time24} — News unavailable"
+    else:
+        if not content:
+            return f"{time24} — Weather unavailable"
+        return (
+            f"{time24} — Hampton Wick\n"
+            f"{content['temp']}°C  {content['description']}\n"
+            f"Wind {content['wind_mph']}mph  Feels like {content['feels_like']}°C"
+        )
+
 
 # ── Admin settings ────────────────────────────────────────────────────────────
 SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.json')
@@ -60,6 +165,11 @@ AVAILABLE_MODES = [
         'id': 'smart',
         'name': 'Smart (commute)',
         'description': 'Trains during commute hours, random clock otherwise',
+    },
+    {
+        'id': 'info',
+        'name': 'News & Weather',
+        'description': '5 BBC headlines then Hampton Wick weather, cycling each minute',
     },
 ]
 
@@ -484,7 +594,21 @@ def _compose(body):
         or (mode == 'smart' and is_commute_time(hour, minute))
     )
 
-    if show_trains:
+    if mode == 'info':
+        kind, content, error = get_info_content(minute_of_day)
+        poem = format_info_poem(kind, content, time24)
+        poem_id = generate_poem_id(time24, poem)
+        response = {
+            'poemId': poem_id,
+            'time24': time24,
+            'poem': poem,
+            'preferredFont': 'INTER',
+            'screensaver': False,
+            'mode': f'info:{kind}',
+        }
+        if error:
+            response['error'] = error
+    elif show_trains:
         trains, error = get_train_departures()
         poem = format_trains_poem(trains, time24)
         poem_id = generate_poem_id(time24, poem)
