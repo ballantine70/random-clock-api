@@ -26,11 +26,9 @@ API_KEY = "poem.randombook"  # Change this to your own key
 REQUIRE_AUTH = False  # Set to True to require authorization header
 
 # National Rail departures via Realtime Trains API (RTT)
-# Register for a free key at https://www.realtimetrains.co.uk/about/developer/pull/docs/
-# Hampton Wick CRS code: HMW
-RTT_USERNAME = os.environ.get('RTT_USERNAME', '')
-RTT_PASSWORD = os.environ.get('RTT_PASSWORD', '')
-RTT_URL = 'https://api.rtt.io/api/v1/json/station/HMW/departures'
+# Register at realtimetrains.co.uk — set RTT_TOKEN to the Bearer token from your token details page
+RTT_TOKEN = os.environ.get('RTT_TOKEN', '')
+RTT_URL = 'https://data.rtt.io/v1/station/HMW/departures'
 
 # Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
 COMMUTE_WINDOWS = [
@@ -97,13 +95,13 @@ def get_train_departures(count=4):
     """Fetch upcoming departures from Hampton Wick via Realtime Trains API.
     Returns (list_of_trains, error_string_or_None).
     """
-    if not RTT_USERNAME or not RTT_PASSWORD:
-        return [], 'RTT_USERNAME and RTT_PASSWORD environment variables are not set'
+    if not RTT_TOKEN:
+        return [], 'RTT_TOKEN environment variable is not set'
 
     try:
         resp = http_requests.get(
             RTT_URL,
-            auth=(RTT_USERNAME, RTT_PASSWORD),
+            headers={'Authorization': f'Bearer {RTT_TOKEN}'},
             timeout=8,
         )
         resp.raise_for_status()
