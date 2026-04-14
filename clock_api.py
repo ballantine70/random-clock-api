@@ -220,14 +220,17 @@ def get_air_quality():
         return _air_cache['data'], str(exc)
 
 
-def get_poem1_content(time24, minute_of_day):
+def get_poem1_content(time24, minute_of_day, forwarded_auth=''):
     """Proxy a poem from poem.town for the current minute, cached per-minute."""
     if _poem1_cache['data'] is not None and _poem1_cache['minute'] == minute_of_day:
         return _poem1_cache['data'], None
     try:
         headers = {'Content-Type': 'application/json'}
+        # Prefer explicit env var; otherwise forward the device's own auth header
         if POEM_TOWN_API_KEY:
             headers['Authorization'] = f'Bearer {POEM_TOWN_API_KEY}'
+        elif forwarded_auth:
+            headers['Authorization'] = forwarded_auth
         resp = http_requests.post(
             POEM_TOWN_URL,
             json={'time24': time24},
@@ -785,7 +788,8 @@ def _compose_feed(feed_id, time24, hour, minute, minute_of_day):
         return resp
 
     if feed_id == 'poem1':
-        data, error = get_poem1_content(time24, minute_of_day)
+        forwarded_auth = request.headers.get('Authorization', '')
+        data, error = get_poem1_content(time24, minute_of_day, forwarded_auth)
         if data and data.get('poem'):
             resp = {
                 'poemId':        data.get('poemId', generate_poem_id(time24, 'poem1')),
