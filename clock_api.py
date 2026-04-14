@@ -33,6 +33,20 @@ def tfl_params():
     """Build TfL query params, injecting app_key if configured."""
     return {'app_key': TFL_API_KEY} if TFL_API_KEY else {}
 
+# Commute windows (inclusive, UK local time) — (start_hour, start_min, end_hour, end_min)
+COMMUTE_WINDOWS = [
+    (6,  0,  9, 30),   # morning:  06:00 – 09:30
+    (16, 0, 19, 30),   # evening:  16:00 – 19:30
+]
+
+def is_commute_time(hour, minute):
+    """Return True if hour:minute (UK local) falls within a commute window."""
+    t = hour * 60 + minute
+    return any(
+        sh * 60 + sm <= t <= eh * 60 + em
+        for sh, sm, eh, em in COMMUTE_WINDOWS
+    )
+
 # Load the content database
 with open('random_clock_content.json', 'r') as f:
     data = json.load(f)
@@ -374,6 +388,65 @@ def trains_compose():
     return jsonify(response)
 
 
+@app.route('/api/v1/compose', methods=['POST'])
+def smart_compose():
+    """Combined Poem/1 endpoint — trains during commute hours, clock otherwise."""
+    if REQUIRE_AUTH and not check_auth():
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    try:
+        body = request.get_json(force=True, silent=True) or {}
+    except Exception:
+        body = {}
+
+    # Determine UK local time from the request
+    if 'time24' in body:
+        time24 = body['time24']
+        hour, minute = map(int, time24.split(':'))
+    elif 'geolocate' in body:
+        dt = datetime.fromisoformat(body['geolocate'].replace('Z', '+00:00'))
+        if UK_TZ:
+            dt = dt.astimezone(UK_TZ)
+        time24 = dt.strftime('%H:%M')
+        hour, minute = dt.hour, dt.minute
+    else:
+        now = datetime.now(UK_TZ) if UK_TZ else datetime.now()
+        time24 = now.strftime('%H:%M')
+        hour, minute = now.hour, now.minute
+
+    if is_commute_time(hour, minute):
+        trains, error = get_train_departures(count=4)
+        poem = format_trains_poem(trains, time24)
+        poem_id = generate_poem_id(time24, poem)
+        response = {
+            'poemId': poem_id,
+            'time24': time24,
+            'poem': poem,
+            'preferredFont': 'INTER',
+            'screensaver': False,
+            'mode': 'trains',
+            'trains': trains,
+        }
+        if error:
+            response['error'] = error
+    else:
+        minute_of_day = hour * 60 + minute
+        schedule = generate_daily_schedule()
+        content = schedule[minute_of_day]['content'].replace('–', '-')
+        poem = f"{time24} — {content}"
+        poem_id = generate_poem_id(time24, poem)
+        response = {
+            'poemId': poem_id,
+            'time24': time24,
+            'poem': poem,
+            'preferredFont': 'INTER',
+            'screensaver': False,
+            'mode': 'clock',
+        }
+
+    return jsonify(response)
+
+
 @app.route('/api/v1/trains', methods=['GET'])
 def trains_get():
     """Convenience GET endpoint — returns live Hampton Wick departures."""
@@ -446,11 +519,19 @@ def index():
             Unlike a poem
         </div>
         
-        <h2>Train Departures Mode — Hampton Wick Station:</h2>
+        <h2>Smart Combined Mode (recommended for devices):</h2>
+
+        <div class="endpoint">
+            <strong>POST /api/v1/compose</strong><br>
+            Trains during commute hours (06:00–09:30 and 16:00–19:30 UK time),
+            random clock content at all other times. Point your device here.
+        </div>
+
+        <h2>Individual Mode Endpoints:</h2>
 
         <div class="endpoint">
             <strong>POST /api/v1/trains/compose</strong><br>
-            Poem/1 compatible — returns next 4 departures from Hampton Wick (via TfL API).
+            Always returns next 4 departures from Hampton Wick (via TfL API).
             Set <code>TFL_API_KEY</code> env var for higher rate limits.
         </div>
 
