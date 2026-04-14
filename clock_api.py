@@ -34,9 +34,11 @@ RTT_URL = 'https://data.rtt.io/rtt/location'
 WALK_TIME_MINS = 15  # minutes walk to Hampton Wick station
 
 # ── News & Weather ────────────────────────────────────────────────────────────
-BBC_RSS_URL     = 'https://feeds.bbci.co.uk/news/rss.xml'
-OPEN_METEO_URL  = 'https://api.open-meteo.com/v1/forecast'
-HW_LAT, HW_LON  = 51.4145, -0.3125   # Hampton Wick
+BBC_RSS_URL      = 'https://feeds.bbci.co.uk/news/rss.xml'
+OPEN_METEO_URL   = 'https://api.open-meteo.com/v1/forecast'
+AIR_QUALITY_URL  = 'https://air-quality-api.open-meteo.com/v1/air-quality'
+EA_STATIONS_URL  = 'https://environment.data.gov.uk/flood-monitoring/id/stations'
+HW_LAT, HW_LON   = 51.4145, -0.3125   # Hampton Wick
 
 WMO_DESCRIPTIONS = {
     0: 'Clear sky',
@@ -50,8 +52,16 @@ WMO_DESCRIPTIONS = {
     95: 'Thunderstorm', 96: 'Thunderstorm & hail', 99: 'Heavy thunderstorm',
 }
 
+AQI_LABELS = [(20, 'Good'), (40, 'Fair'), (60, 'Moderate'),
+              (80, 'Poor'), (100, 'Very poor'), (float('inf'), 'Hazardous')]
+
+def aqi_label(aqi):
+    return next(label for threshold, label in AQI_LABELS if aqi <= threshold)
+
 _news_cache    = {'data': None, 'at': None}
 _weather_cache = {'data': None, 'at': None}
+_river_cache   = {'data': None, 'at': None, 'station_id': None, 'station_name': None}
+_air_cache     = {'data': None, 'at': None}
 
 def get_news_headlines(count=5):
     """Fetch top BBC News headlines, cached for 1 hour."""
@@ -109,7 +119,103 @@ def get_weather():
         return _weather_cache['data'], str(exc)
 
 
-INFO_CYCLE = 6   # 5 news slots + 1 weather slot
+def get_river_level():
+    """Fetch Thames river level near Hampton Wick from Environment Agency, cached 15 min."""
+    now = datetime.now()
+    if _river_cache['data'] is not None and _river_cache['at'] and \
+            (now - _river_cache['at']) < timedelta(minutes=15):
+        return _river_cache['data'], None
+    try:
+        # Resolve nearest gauge station on first call (cached for life of process)
+        if not _river_cache['station_id']:
+            resp = http_requests.get(
+                EA_STATIONS_URL,
+                params={'lat': HW_LAT, 'long': HW_LON, 'dist': 5,
+                        'type': 'SingleLevel', '_limit': 10},
+                timeout=8,
+            )
+            resp.raise_for_status()
+            items = resp.json().get('items', [])
+            # Prefer a Thames river gauge
+            station = next(
+                (s for s in items if 'thames' in s.get('riverName', '').lower()
+                 or 'thames' in s.get('label', '').lower()),
+                items[0] if items else None,
+            )
+            if not station:
+                return None, 'No river gauge found near Hampton Wick'
+            _river_cache['station_id']   = station['@id'].split('/')[-1]
+            _river_cache['station_name'] = station.get('label', 'River Thames')
+
+        # Fetch the two most recent readings to determine trend
+        resp = http_requests.get(
+            f"{EA_STATIONS_URL}/{_river_cache['station_id']}/readings",
+            params={'_sorted': True, '_limit': 2},
+            timeout=8,
+        )
+        resp.raise_for_status()
+        readings = resp.json().get('items', [])
+        if not readings:
+            return None, 'No readings returned'
+
+        latest = readings[0].get('value')
+        previous = readings[1].get('value') if len(readings) > 1 else None
+        if latest is None:
+            return None, 'Reading value missing'
+
+        if previous is not None:
+            diff = latest - previous
+            trend = 'Rising' if diff > 0.01 else ('Falling' if diff < -0.01 else 'Steady')
+        else:
+            trend = 'Steady'
+
+        data = {
+            'level': round(latest, 2),
+            'trend': trend,
+            'station': _river_cache['station_name'],
+        }
+        _river_cache['data'] = data
+        _river_cache['at']   = now
+        return data, None
+    except Exception as exc:
+        return _river_cache['data'], str(exc)
+
+
+def get_air_quality():
+    """Fetch air quality for Hampton Wick from Open-Meteo, cached 30 min."""
+    now = datetime.now()
+    if _air_cache['data'] is not None and _air_cache['at'] and \
+            (now - _air_cache['at']) < timedelta(minutes=30):
+        return _air_cache['data'], None
+    try:
+        resp = http_requests.get(
+            AIR_QUALITY_URL,
+            params={
+                'latitude': HW_LAT,
+                'longitude': HW_LON,
+                'current': 'european_aqi,pm2_5,pm10,nitrogen_dioxide',
+                'timezone': 'Europe/London',
+            },
+            timeout=8,
+        )
+        resp.raise_for_status()
+        c = resp.json().get('current', {})
+        aqi = round(c.get('european_aqi', 0))
+        data = {
+            'aqi':   aqi,
+            'label': aqi_label(aqi),
+            'pm25':  round(c.get('pm2_5', 0), 1),
+            'pm10':  round(c.get('pm10', 0), 1),
+            'no2':   round(c.get('nitrogen_dioxide', 0), 1),
+        }
+        _air_cache['data'] = data
+        _air_cache['at']   = now
+        return data, None
+    except Exception as exc:
+        return _air_cache['data'], str(exc)
+
+
+INFO_CYCLE = 8   # 5 news + weather + river + air quality
 
 def get_info_content(minute_of_day):
     """Return (kind, content, error) for the current info cycle position."""
@@ -118,22 +224,45 @@ def get_info_content(minute_of_day):
         headlines, error = get_news_headlines(5)
         content = headlines[position] if position < len(headlines) else None
         return 'news', content, error
-    else:
+    elif position == 5:
         weather, error = get_weather()
         return 'weather', weather, error
+    elif position == 6:
+        river, error = get_river_level()
+        return 'river', river, error
+    else:
+        air, error = get_air_quality()
+        return 'air', air, error
 
 
 def format_info_poem(kind, content, time24):
-    """Format a news headline or weather snapshot as a poem string."""
+    """Format a news/weather/river/air snapshot as a poem string."""
     if kind == 'news':
         return f"{time24} — BBC News\n{content}" if content else f"{time24} — News unavailable"
-    else:
+    elif kind == 'weather':
         if not content:
             return f"{time24} — Weather unavailable"
         return (
             f"{time24} — Hampton Wick\n"
             f"{content['temp']}°C  {content['description']}\n"
             f"Wind {content['wind_mph']}mph  Feels like {content['feels_like']}°C"
+        )
+    elif kind == 'river':
+        if not content:
+            return f"{time24} — River level unavailable"
+        trend = content.get('trend', '')
+        trend_str = f"  {trend}" if trend else ''
+        return (
+            f"{time24} — Thames at {content['station']}\n"
+            f"Level: {content['level']}m{trend_str}"
+        )
+    else:  # air
+        if not content:
+            return f"{time24} — Air quality unavailable"
+        return (
+            f"{time24} — Hampton Wick air\n"
+            f"{content['label']} (AQI {content['aqi']})\n"
+            f"PM2.5: {content['pm25']}  PM10: {content['pm10']}  NO\u2082: {content['no2']}"
         )
 
 
